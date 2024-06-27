@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/06/27 13:44:23 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/06/16 20:25:21 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ int	main(int argc, char **argv)
 
 	if (argc == 5 || argc == 6)
 	{
-		to_parse(&table, argv);
+		// go on
 	}
 	else
 	{
 		error_exit("WRONG INPUT\n"
-			W"Try: \""G"./philo 4 900 300 300 "C"4"W"\"\n"
-			W"      [nbr_philos] [t_die] [t_eat] [t_sleep]"C" [meals_limit]\n"
-			C"					       Optional"RST);
+				G"Try: ./philo 4 900 300 300"C"[4]"
+				W"[program] [t_die] [t_eat] [t_sleep]"C"[meals_limit]"
+				C"Optional"RST);
 	}
 }
