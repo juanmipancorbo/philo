@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/06/27 13:44:24 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/04 07:11:32 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_table t_table;
 typedef struct s_fork
 {
 	t_mtx		fork;
-	int			id;
+	int			fork_id;
 }				t_fork;
 
 typedef struct s_philo
@@ -77,3 +77,4 @@ void	to_parse(t_table *table, char **argv);
 /*                                   UTILS                                    */
 /* ************************************************************************** */
 void	error_exit(const char *error);
+void	*safe_malloc(size_t bytes);

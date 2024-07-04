@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/06/27 13:44:21 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/04 07:11:31 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@ static int	atol_check(char *str)
 		if (str[i] >= '0' && str[i] <= '9')
 			result = (result * 10) + (str[i++] - 48);
 		else
-			error_exit("Only positive numbers are allowed");
+			error_exit("Only positive numbers are allowed.");
 	}
+	if (result > INT_MAX || i > 10)
+		error_exit("Values cannot exceed INT_MAX.");
+	if (result < 60)
+		error_exit("Values cannot be less than 60 ms.");
 	return (result);
 }
 
@@ -40,11 +44,27 @@ void	to_parse(t_table *table, char **argv)
 	i = 0;
 	while (argv[i++])
 	{
-		table->philo_nbr = atol_check(argv[1]);
-		table->time_to_die = atol_check(argv[2]);
-		table->time_to_eat = atol_check(argv[3]);
-		table->time_to_sleep = atol_check(argv[4]);
+		table->philo_nbr = atol_check(argv[1]) * 1e3;
+		table->time_to_die = atol_check(argv[2]) * 1e3;
+		table->time_to_eat = atol_check(argv[3]) * 1e3;
+		table->time_to_sleep = atol_check(argv[4]) * 1e3;
 		if(argv[5])
 			table->max_meals = atol_check(argv[5]);
 	}
 }
+
+void	to_init(t_table *table)
+{
+	int	i;
+
+	i = -1;
+	table->end_simulation = 0;
+	table->philos = safe_malloc(sizeof(t_philo) * table->philo_nbr);
+	table->forks = safe_malloc(sizeof(t_fork) * table->philo_nbr);
+	while(i++ < table->philo_nbr)
+	{
+		if(pthread_mutex_init(&table->forks[i].fork, NULL))
+			error_exit("Problem initializing the mutex.");
+		table->forks[i].fork_id = i;
+	}
+} 
