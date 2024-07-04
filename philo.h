@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/04 07:11:32 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/04 21:03:42 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef struct s_table t_table;
 
 typedef struct s_fork
 {
-	t_mtx		fork;
-	int			fork_id;
+	t_mtx		mtx;
+	int			id;
 }				t_fork;
 
 typedef struct s_philo
@@ -49,8 +49,8 @@ typedef struct s_philo
 	int			full_of_food;
 	long		meals_count;
 	long		last_meal_time;
-	t_mtx		*left_fork;
-	t_mtx		*right_fork;
+	t_fork		*left_fork;
+	t_fork		*right_fork;
 	pthread_t	thread_id;
 	t_table		*table;
 }				t_philo;
@@ -72,6 +72,7 @@ struct s_table
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 void	to_parse(t_table *table, char **argv);
+void	to_init(t_table *table);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */

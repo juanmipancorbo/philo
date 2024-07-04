@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/04 07:11:33 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/04 21:03:43 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	main(int argc, char **argv)
 	if (argc == 5 || argc == 6)
 	{
 		to_parse(&table, argv);
+		to_init(&table);
 	}
 	else
 	{
@@ -65,4 +66,5 @@ int	main(int argc, char **argv)
 			W"      [nbr_philos] [t_die] [t_eat] [t_sleep]"C" [meals_limit]\n"
 			C"					       Optional"RST);
 	}
+
 }
