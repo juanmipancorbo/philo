@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/04 21:03:42 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/07 19:37:05 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 					// threads: create, join, detach 
 # include <sys/time.h> // gettimeofday
 # include <limits.h> // INT_MAX
+# include <errno.h>
 
 /* ************************************************************************** */
 /*                           ANSI ESCAPE SECUENCES                            */
@@ -29,6 +30,21 @@
 # define M 		"\033[1;35m"
 # define C 		"\033[1;36m"
 # define W 		"\033[1;37m"
+
+/* ************************************************************************** */
+/*                                 OPCODE                                     */
+/* ************************************************************************** */
+
+typedef enum	e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}				t_opcode;
 
 /* ************************************************************************** */
 /*                                 STRUCTS                                    */
@@ -73,9 +89,8 @@ struct s_table
 /* ************************************************************************** */
 void	to_parse(t_table *table, char **argv);
 void	to_init(t_table *table);
-
-/* ************************************************************************** */
-/*                                   UTILS                                    */
-/* ************************************************************************** */
-void	error_exit(const char *error);
-void	*safe_malloc(size_t bytes);
+void	to_exit(const char *error);
+void	*to_malloc(size_t bytes);
+void	mutex_handler(t_mtx *mutex, t_opcode opcode);
+void	thread_handler(pthread_t *thread, void *(*ft)(void*),
+							 void *data, t_opcode opcode); 

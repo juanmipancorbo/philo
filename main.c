@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/04 21:03:43 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/07 19:37:06 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ Ex. entry values:
 */
 #include "philo.h"
 
+void	to_exit(const char *error)
+{
+	printf(R"%s\n"RST, error);
+	exit(EXIT_FAILURE);
+}
+
 int	main(int argc, char **argv)
 {
 	t_table	table;
@@ -61,7 +67,7 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		error_exit("WRONG INPUT\n"
+		to_exit("WRONG INPUT\n"
 			W"Try: \""G"./philo 4 900 300 300 "C"4"W"\"\n"
 			W"      [nbr_philos] [t_die] [t_eat] [t_sleep]"C" [meals_limit]\n"
 			C"					       Optional"RST);

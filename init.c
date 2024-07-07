@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/04 21:03:41 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/07 19:37:03 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ static int	atol_check(char *str, int argv_1)
 		if (str[i] >= '0' && str[i] <= '9')
 			result = (result * 10) + (str[i++] - 48);
 		else
-			error_exit("Only positive numbers are allowed.");
+			to_exit("Only positive numbers are allowed.");
 	}
 	if (result == 0)
-		error_exit("Values cannot be 0.");
+		to_exit("Values cannot be 0.");
 	if (result > INT_MAX || i > 10)
-		error_exit("Values cannot exceed INT_MAX.");
+		to_exit("Values cannot exceed INT_MAX.");
 	if (!argv_1 && result < 60)
-		error_exit("Values cannot be less than 60 ms.");
+		to_exit("Values cannot be less than 60 ms.");
 	return (result);
 }
 
@@ -99,9 +99,8 @@ void	to_init(t_table *table)
 	table->forks = safe_malloc(sizeof(t_fork) * table->philo_nbr);
 	while(i++ < table->philo_nbr)
 	{
-		if(pthread_mutex_init(&table->forks[i].mtx, NULL))
-			error_exit("Problem initializing the mutex.");
-		table->forks[i].id = i;
+		mutex_handler(&table->forks[i].mtx, INIT);
+		table->forks[i].id = i; 
 	}
 	to_philos(table);
 }
