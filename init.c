@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/07 19:37:03 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:43:14 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	to_init(t_table *table)
 	i = -1;
 	table->end_simulation = 0;
 	table->philos = safe_malloc(sizeof(t_philo) * table->philo_nbr);
+	mutex_handler(&table->table_mtx, INIT);
 	table->forks = safe_malloc(sizeof(t_fork) * table->philo_nbr);
 	while(i++ < table->philo_nbr)
 	{

@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/07 19:37:05 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:43:16 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ struct s_table
 	long	max_meals;
 	long	start_time; 
 	int		end_simulation;
+	int		threads_ready;
+	t_mtx	table_mtx;
 	t_fork	*forks;
 	t_philo	*philos;
 };
@@ -93,4 +95,5 @@ void	to_exit(const char *error);
 void	*to_malloc(size_t bytes);
 void	mutex_handler(t_mtx *mutex, t_opcode opcode);
 void	thread_handler(pthread_t *thread, void *(*ft)(void*),
-							 void *data, t_opcode opcode); 
+							 void *data, t_opcode opcode);
+void	to_dinner(t_table *table);
