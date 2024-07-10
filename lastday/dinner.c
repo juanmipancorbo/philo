@@ -1,38 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/10 19:44:29 by jpancorb         ###   ########.fr       */
+/*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
+/*   Updated: 2024/07/08 21:43:15 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	to_exit(const char *error)
+void	to_start(void *data)
 {
-	printf(R"%s\n"RST, error);
-	exit(EXIT_FAILURE);
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
+
+	wait_threads(philo->table);//todo
 }
 
-int	main(int argc, char **argv)
+void	to_dinner(t_table *table)
 {
-	t_table	table;
+	int	i;
 
-	if (argc == 5 || argc == 6)
-	{
-		to_parse(&table, argv);
-		to_init(&table);
-		to_dinner(&table);
-	}
+	i = -1;
+	if (table->max_meals == 0)
+		return ;
+	else if (table->philo_nbr == 1)
+		;
 	else
-	{
-		to_exit("WRONG INPUT\n"
-			W"Try: \""G"./philo 4 900 300 300 "C"4"W"\"\n"
-			W"      [nbr_philos] [t_die] [t_eat] [t_sleep]"C" [meals_limit]\n"
-			C"					       Optional"RST);
-	}
+		while (++i < table->philo_nbr)
+			thread_handler(&table->philos[i].thread_id, to_start, 
+								&table->philos[i], CREATE);
 }

@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/08 21:43:16 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:54:09 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # include <stdlib.h> // malloc, free
 # include <unistd.h> // write, usleep
 # include <pthread.h> // mutex: init, destroy, lock, unlock
-					// threads: create, join, detach 
+						// threads: create, join, detach 
 # include <sys/time.h> // gettimeofday
 # include <limits.h> // INT_MAX
 # include <errno.h>
@@ -31,9 +31,20 @@
 # define C 		"\033[1;36m"
 # define W 		"\033[1;37m"
 
+#define DEBUG_MODE	0
 /* ************************************************************************** */
 /*                                 OPCODE                                     */
 /* ************************************************************************** */
+
+typedef enum	e_status
+{
+	EATING,
+	SLEEPING,
+	THINKING,
+	TAKE_FIRST_FORK,
+	TAKE_SECOND_FORK,
+	DIED,
+}				t_status;
 
 typedef enum	e_opcode
 {
@@ -45,6 +56,13 @@ typedef enum	e_opcode
 	JOIN,
 	DETACH,
 }				t_opcode;
+
+typedef enum	e_time_code
+{
+	SECOND,
+	MILLISECOND,
+	MICROSECOND,
+}				t_time_code;
 
 /* ************************************************************************** */
 /*                                 STRUCTS                                    */
@@ -62,16 +80,17 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	int			id;
-	int			full_of_food;
+	long		full_of_food;
 	long		meals_count;
 	long		last_meal_time;
-	t_fork		*left_fork;
-	t_fork		*right_fork;
+	t_fork		*first_fork;
+	t_fork		*second_fork;
 	pthread_t	thread_id;
+	t_mtx		mtx;
 	t_table		*table;
 }				t_philo;
 
-struct s_table
+typedef struct s_table
 {
 	long	philo_nbr;
 	long	time_to_die;
@@ -79,12 +98,12 @@ struct s_table
 	long	time_to_sleep;
 	long	max_meals;
 	long	start_time; 
-	int		end_simulation;
-	int		threads_ready;
+	long	end_simulation;
+	long	threads_ready;
 	t_mtx	table_mtx;
 	t_fork	*forks;
 	t_philo	*philos;
-};
+}				t_table;
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
@@ -94,6 +113,14 @@ void	to_init(t_table *table);
 void	to_exit(const char *error);
 void	*to_malloc(size_t bytes);
 void	mutex_handler(t_mtx *mutex, t_opcode opcode);
-void	thread_handler(pthread_t *thread, void *(*ft)(void*),
-							 void *data, t_opcode opcode);
+void	thread_handler(pthread_t *thread, void *(*ft)(void *),
+						void *data, t_opcode opcode);
 void	to_dinner(t_table *table);
+void	*to_start(void *data);
+void	to_set(t_mtx *mutex, long *dst, long value);
+long	to_get(t_mtx *mutex, long *value);
+int		to_finish(t_table *table);
+void	to_wait(t_table *table);
+long	to_time(t_time_code time_code);
+void	precise_usleep(long usec, t_table *table);
+void	print_status(t_status status, t_philo *philo, int debug);

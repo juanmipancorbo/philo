@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/08 21:43:18 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:54:23 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	mutex_handler(t_mtx *mutex, t_opcode opcode)
 		mutex_error(pthread_mutex_destroy(mutex), opcode);
 	else
 		to_exit("Wrong opcode for \'mutex_handler\':\n"
-					"use <LOCK> <UNLOCK> <INIT> <DESTROY>");
+				"use <LOCK> <UNLOCK> <INIT> <DESTROY>");
 }
 
 static void	thread_error(int status, t_opcode opcode)
@@ -75,14 +75,14 @@ static void	thread_error(int status, t_opcode opcode)
 	}
 	else if (ESRCH == status)
 		to_exit("No thread could be found corresponding to that specified "
-							"by the given thread ID, thread.");
+				"by the given thread ID, thread.");
 	else if (EDEADLK == status)
 		to_exit("A deadlock was detected or the value of thread specifies the "
-									"calling thread."); 
+				"calling thread."); 
 }
 
-void	thread_handler(pthread_t *thread, void *(*ft)(void*),
-							 void *data, t_opcode opcode)
+void	thread_handler(pthread_t *thread, void *(*ft)(void *),
+						void *data, t_opcode opcode)
 {
 	if (CREATE == opcode)
 		thread_error(pthread_create(thread, NULL, ft, data), opcode);
@@ -92,5 +92,5 @@ void	thread_handler(pthread_t *thread, void *(*ft)(void*),
 		thread_error(pthread_detach(*thread), opcode);
 	else
 		to_exit("Wrong opcode for \'thread_handler\':\n"
-					"use <CREATE> <JOIN> <DETACH>");
+				"use <CREATE> <JOIN> <DETACH>");
 }

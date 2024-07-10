@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/06/16 20:25:23 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:43:16 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 					// threads: create, join, detach 
 # include <sys/time.h> // gettimeofday
 # include <limits.h> // INT_MAX
+# include <errno.h>
 
 /* ************************************************************************** */
 /*                           ANSI ESCAPE SECUENCES                            */
@@ -31,6 +32,21 @@
 # define W 		"\033[1;37m"
 
 /* ************************************************************************** */
+/*                                 OPCODE                                     */
+/* ************************************************************************** */
+
+typedef enum	e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}				t_opcode;
+
+/* ************************************************************************** */
 /*                                 STRUCTS                                    */
 /* ************************************************************************** */
 typedef pthread_mutex_t t_mtx;
@@ -39,7 +55,7 @@ typedef struct s_table t_table;
 
 typedef struct s_fork
 {
-	t_mtx		fork;
+	t_mtx		mtx;
 	int			id;
 }				t_fork;
 
@@ -49,8 +65,8 @@ typedef struct s_philo
 	int			full_of_food;
 	long		meals_count;
 	long		last_meal_time;
-	t_mtx		*left_fork;
-	t_mtx		*right_fork;
+	t_fork		*left_fork;
+	t_fork		*right_fork;
 	pthread_t	thread_id;
 	t_table		*table;
 }				t_philo;
@@ -64,11 +80,20 @@ struct s_table
 	long	max_meals;
 	long	start_time; 
 	int		end_simulation;
+	int		threads_ready;
+	t_mtx	table_mtx;
 	t_fork	*forks;
 	t_philo	*philos;
 };
 
 /* ************************************************************************** */
-/*                                   UTILS                                    */
+/*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
-void	error_exit(const char *error);
+void	to_parse(t_table *table, char **argv);
+void	to_init(t_table *table);
+void	to_exit(const char *error);
+void	*to_malloc(size_t bytes);
+void	mutex_handler(t_mtx *mutex, t_opcode opcode);
+void	thread_handler(pthread_t *thread, void *(*ft)(void*),
+							 void *data, t_opcode opcode);
+void	to_dinner(t_table *table);

@@ -5,92 +5,48 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/08 21:43:18 by jpancorb         ###   ########.fr       */
+/*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
+/*   Updated: 2024/07/10 19:41:09 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*to_malloc(size_t bytes)
-{  
-	void	*ret;
-
-	ret = malloc(bytes);
-	if(!ret)
-		to_exit("Malloc error.");
-	return(ret);
-}
-
-static void	mutex_error(int status, t_opcode opcode)
+long	to_time(t_time_code time_code)
 {
-	if (status == 0)
-		return ;
-	if (EINVAL == status)
-	{
-		if (LOCK == opcode || UNLOCK == opcode || DESTROY == opcode)
-			to_exit("The value especified by mutex is invalid.");
-		else if (INIT == opcode)
-			to_exit("The value especified by attr is invalid.");
-	}
-	else if (EDEADLK == status)
-		to_exit("A deadlock would occur if the thread blocked waiting for mutex.");
-	else if (EPERM == status)
-		to_exit("The current thread does not hold a lock on mutex.");
-	else if (ENOMEM == status)
-		to_exit("The process cannot allocate enough memory to create another mutex.");
-	else if (EBUSY == status)
-		to_exit("Mutex is locked.");
-}
+	struct timeval	time;
 
-void	mutex_handler(t_mtx *mutex, t_opcode opcode)
-{
-	if (LOCK == opcode)
-		mutex_error(pthread_mutex_lock(mutex), opcode);
-	else if (UNLOCK == opcode)
-		mutex_error(pthread_mutex_unlock(mutex), opcode);
-	else if (INIT == opcode)
-		mutex_error(pthread_mutex_init(mutex, NULL), opcode);
-	else if (DESTROY == opcode)
-		mutex_error(pthread_mutex_destroy(mutex), opcode);
+	if (gettimeofday(&time, NULL))
+		to_exit("Gettimeofday failed.");
+	else if (SECOND == time_code)
+		return (time.tv_sec + (time.tv_usec / 1e6));
+	else if (MILLISECOND == time_code)
+		return ((time.tv_sec * 1e3) + (time.tv_usec / 1e3));
+	else if (MICROSECOND == time_code)
+		return ((time.tv_sec * 1e6) + time.tv_usec);
 	else
-		to_exit("Wrong opcode for \'mutex_handler\':\n"
-					"use <LOCK> <UNLOCK> <INIT> <DESTROY>");
+		to_exit("Wrong input to \'to_time\'.");
+	return (0);
 }
 
-static void	thread_error(int status, t_opcode opcode)
+void	precise_usleep(long usec, t_table *table)
 {
-	if (status == 0)
-		return ;
-	if (EAGAIN == status)
-		to_exit("No resources to create another thread.");
-	else if (EPERM == status)
-		to_exit("The caller does not have appropriate permission.");
-	else if (EINVAL == status)
+	long	start;
+	long	elapsed;
+	long	time_left;
+
+	start = to_time(MICROSECOND);
+	while (to_time(MICROSECOND) - start < usec)
 	{
-		if (CREATE == opcode)
-			to_exit("The value especified by attr is invalid.");
-		else if (JOIN == opcode || DETACH == opcode)
-			to_exit("The value especified by thread is not joinable.");
+		if (to_finish(table))
+			break ;
+		elapsed = to_time(MICROSECOND) - start;
+		time_left = usec - elapsed;
+		if (time_left > 1e3)
+			usleep(time_left / 2);
+		else
+			while (to_time(MICROSECOND) - start < usec)
+				;
 	}
-	else if (ESRCH == status)
-		to_exit("No thread could be found corresponding to that specified "
-							"by the given thread ID, thread.");
-	else if (EDEADLK == status)
-		to_exit("A deadlock was detected or the value of thread specifies the "
-									"calling thread."); 
-}
-
-void	thread_handler(pthread_t *thread, void *(*ft)(void*),
-							 void *data, t_opcode opcode)
-{
-	if (CREATE == opcode)
-		thread_error(pthread_create(thread, NULL, ft, data), opcode);
-	else if (JOIN == opcode)
-		thread_error(pthread_join(*thread, NULL), opcode);
-	else if (DETACH == opcode)
-		thread_error(pthread_detach(*thread), opcode);
-	else
-		to_exit("Wrong opcode for \'thread_handler\':\n"
-					"use <CREATE> <JOIN> <DETACH>");
+	
 }
