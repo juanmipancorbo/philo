@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 20:07:05 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 21:47:43 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,12 @@ void	to_init(t_table *table)
 
 	i = -1;
 	table->end_simulation = 0;
+	table->threads_ready = 0;
+	table->nbr_threads_running = 0;
 	table->philos = to_malloc(sizeof(t_philo) * table->philo_nbr);
-	mutex_handler(&table->table_mtx, INIT);
-	mutex_handler(&table->write_mtx, INIT);
 	table->forks = to_malloc(sizeof(t_fork) * table->philo_nbr);
+	mutex_handler(&table->table_mtx, INIT);
+	mutex_handler(&table->write_mtx, INIT); 
 	while (++i < table->philo_nbr)
 	{
 		mutex_handler(&table->forks[i].mtx, INIT);

@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 20:07:09 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 21:47:53 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,20 @@ typedef struct s_philo
 
 typedef struct s_table
 {
-	long	philo_nbr;
-	long	time_to_die;
-	long	time_to_eat;
-	long	time_to_sleep;
-	long	max_meals;
-	long	start_time;
-	long	end_simulation;
-	long	threads_ready;
-	t_mtx	table_mtx;
-	t_mtx	write_mtx; 
-	t_fork	*forks;
-	t_philo	*philos;
+	long		philo_nbr;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		max_meals;
+	long		start_time;
+	long		end_simulation;
+	long		threads_ready;
+	long		nbr_threads_running;
+	pthread_t	monitor;
+	t_mtx		table_mtx;
+	t_mtx		write_mtx;
+	t_fork		*forks;
+	t_philo		*philos;
 }				t_table;
 
 /* ************************************************************************** */
@@ -127,5 +129,8 @@ void	to_wait(t_table *table);
 long	to_time(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
 void	print_status(t_status status, t_philo *philo, int debug);
+int		no_dead(t_mtx *mutex, long *threads, long philo_nbr);
+void	to_increase(t_mtx *mutex, long *value); 
+void	*to_monitor(void *data);
 
 #endif

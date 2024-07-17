@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 20:07:12 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 21:47:51 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,5 @@ void	precise_usleep(long usec, t_table *table)
 		else
 			while (to_time(MICROSECOND) - start < usec)
 				;
-	} 
+	}
 }
