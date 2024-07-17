@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/10 19:41:01 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:07:05 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	to_parse(t_table *table, char **argv)
 		table->time_to_die = atol_check(argv[2], 1) * 1e3;
 		table->time_to_eat = atol_check(argv[3], 1) * 1e3;
 		table->time_to_sleep = atol_check(argv[4], 1) * 1e3;
-		if(argv[5])
+		if (argv[5])
 			table->max_meals = atol_check(argv[5], 0);
 	}
 }
@@ -60,13 +60,13 @@ static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
 	int	philo_nbr;
 
 	philo_nbr = philo->table->philo_nbr;
-	if(philo->id % 2)
+	if (philo->id % 2)
 	{
 		philo->first_fork = &forks[(philo_position + 1) % philo_nbr];
 		philo->second_fork = &forks[philo_position];
 	}
 	else
-	{	
+	{
 		philo->first_fork = &forks[philo_position];
 		philo->second_fork = &forks[(philo_position + 1) % philo_nbr];
 	}
@@ -74,11 +74,11 @@ static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
 
 static void	to_philos(t_table *table)
 {
-	int	i;
+	int		i;
 	t_philo	*philo;
 
 	i = -1;
-	while(++i < table->philo_nbr)
+	while (++i < table->philo_nbr)
 	{
 		philo = table->philos + i;
 		philo->id = i + 1;
@@ -98,11 +98,12 @@ void	to_init(t_table *table)
 	table->end_simulation = 0;
 	table->philos = to_malloc(sizeof(t_philo) * table->philo_nbr);
 	mutex_handler(&table->table_mtx, INIT);
+	mutex_handler(&table->write_mtx, INIT);
 	table->forks = to_malloc(sizeof(t_fork) * table->philo_nbr);
-	while(i++ < table->philo_nbr)
+	while (++i < table->philo_nbr)
 	{
 		mutex_handler(&table->forks[i].mtx, INIT);
-		table->forks[i].id = i; 
+		table->forks[i].id = i;
 	}
 	to_philos(table);
 }

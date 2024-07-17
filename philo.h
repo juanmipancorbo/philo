@@ -6,9 +6,12 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/10 20:54:09 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:07:09 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <stdio.h> // printf
 # include <stdlib.h> // malloc, free
@@ -22,7 +25,7 @@
 /* ************************************************************************** */
 /*                           ANSI ESCAPE SECUENCES                            */
 /* ************************************************************************** */
-# define RST 	"\033[0m"
+# define RST		"\033[0m"
 # define R 		"\033[1;31m"
 # define G 		"\033[1;32m"
 # define Y 		"\033[1;33m"
@@ -30,13 +33,12 @@
 # define M 		"\033[1;35m"
 # define C 		"\033[1;36m"
 # define W 		"\033[1;37m"
-
-#define DEBUG_MODE	0
+# define DEBUG_MODE	1
 /* ************************************************************************** */
 /*                                 OPCODE                                     */
 /* ************************************************************************** */
 
-typedef enum	e_status
+typedef enum e_status
 {
 	EATING,
 	SLEEPING,
@@ -46,7 +48,7 @@ typedef enum	e_status
 	DIED,
 }				t_status;
 
-typedef enum	e_opcode
+typedef enum e_opcode
 {
 	LOCK,
 	UNLOCK,
@@ -57,7 +59,7 @@ typedef enum	e_opcode
 	DETACH,
 }				t_opcode;
 
-typedef enum	e_time_code
+typedef enum e_time_code
 {
 	SECOND,
 	MILLISECOND,
@@ -67,9 +69,9 @@ typedef enum	e_time_code
 /* ************************************************************************** */
 /*                                 STRUCTS                                    */
 /* ************************************************************************** */
-typedef pthread_mutex_t t_mtx;
+typedef pthread_mutex_t	t_mtx;
 
-typedef struct s_table t_table;
+typedef struct s_table	t_table;
 
 typedef struct s_fork
 {
@@ -97,10 +99,11 @@ typedef struct s_table
 	long	time_to_eat;
 	long	time_to_sleep;
 	long	max_meals;
-	long	start_time; 
+	long	start_time;
 	long	end_simulation;
 	long	threads_ready;
 	t_mtx	table_mtx;
+	t_mtx	write_mtx; 
 	t_fork	*forks;
 	t_philo	*philos;
 }				t_table;
@@ -114,7 +117,7 @@ void	to_exit(const char *error);
 void	*to_malloc(size_t bytes);
 void	mutex_handler(t_mtx *mutex, t_opcode opcode);
 void	thread_handler(pthread_t *thread, void *(*ft)(void *),
-						void *data, t_opcode opcode);
+			void *data, t_opcode opcode);
 void	to_dinner(t_table *table);
 void	*to_start(void *data);
 void	to_set(t_mtx *mutex, long *dst, long value);
@@ -124,3 +127,5 @@ void	to_wait(t_table *table);
 long	to_time(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
 void	print_status(t_status status, t_philo *philo, int debug);
+
+#endif

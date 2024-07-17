@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 17:40:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/10 19:41:03 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:07:07 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ long	to_get(t_mtx *mutex, long *value)
 	return (ret);
 }
 
-int		to_finish(t_table *table)
+int	to_finish(t_table *table)
 {
 	return (to_get(&table->table_mtx, &table->end_simulation));
 }

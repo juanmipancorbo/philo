@@ -6,20 +6,20 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/10 20:54:23 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:07:05 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 void	*to_malloc(size_t bytes)
-{  
+{
 	void	*ret;
 
 	ret = malloc(bytes);
-	if(!ret)
+	if (!ret)
 		to_exit("Malloc error.");
-	return(ret);
+	return (ret);
 }
 
 static void	mutex_error(int status, t_opcode opcode)
@@ -34,11 +34,13 @@ static void	mutex_error(int status, t_opcode opcode)
 			to_exit("The value especified by attr is invalid.");
 	}
 	else if (EDEADLK == status)
-		to_exit("A deadlock would occur if the thread blocked waiting for mutex.");
+		to_exit("A deadlock would occur if the thread blocked "
+			"waiting for mutex.");
 	else if (EPERM == status)
 		to_exit("The current thread does not hold a lock on mutex.");
 	else if (ENOMEM == status)
-		to_exit("The process cannot allocate enough memory to create another mutex.");
+		to_exit("The process cannot allocate enough memory to "
+			"create another mutex.");
 	else if (EBUSY == status)
 		to_exit("Mutex is locked.");
 }
@@ -55,7 +57,7 @@ void	mutex_handler(t_mtx *mutex, t_opcode opcode)
 		mutex_error(pthread_mutex_destroy(mutex), opcode);
 	else
 		to_exit("Wrong opcode for \'mutex_handler\':\n"
-				"use <LOCK> <UNLOCK> <INIT> <DESTROY>");
+			"use <LOCK> <UNLOCK> <INIT> <DESTROY>");
 }
 
 static void	thread_error(int status, t_opcode opcode)
@@ -75,10 +77,10 @@ static void	thread_error(int status, t_opcode opcode)
 	}
 	else if (ESRCH == status)
 		to_exit("No thread could be found corresponding to that specified "
-				"by the given thread ID, thread.");
+			"by the given thread ID, thread.");
 	else if (EDEADLK == status)
 		to_exit("A deadlock was detected or the value of thread specifies the "
-				"calling thread."); 
+			"calling thread.");
 }
 
 void	thread_handler(pthread_t *thread, void *(*ft)(void *),
@@ -92,5 +94,5 @@ void	thread_handler(pthread_t *thread, void *(*ft)(void *),
 		thread_error(pthread_detach(*thread), opcode);
 	else
 		to_exit("Wrong opcode for \'thread_handler\':\n"
-				"use <CREATE> <JOIN> <DETACH>");
+			"use <CREATE> <JOIN> <DETACH>");
 }
