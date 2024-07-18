@@ -6,15 +6,24 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 21:54:01 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:30:17 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	to_think(t_philo *philo)
+void	to_think(t_philo *philo, int to_detach)
 {
-	print_status(THINKING, philo, DEBUG_MODE);
+	long	t_think;
+
+	if (!to_detach)
+		print_status(THINKING, philo, DEBUG_MODE);
+	if (philo->table->philo_nbr % 2 == 0)
+		return ;
+	t_think = philo->table->time_to_eat * 2 - philo->table->time_to_sleep;
+	if (t_think < 0)
+		t_think = 0;
+	precise_usleep(t_think * 0.42, philo->table);
 }
 
 void	*to_alone(void *arg)
@@ -56,6 +65,7 @@ void	*to_start(void *data)
 	to_wait(philo->table);
 	to_set(&philo->mtx, &philo->last_meal_time, to_time(MILLISECOND));
 	to_increase(&philo->table->table_mtx, &philo->table->nbr_threads_running);
+	to_detach(philo);
 	while (!to_finish(philo->table))
 	{
 		if (philo->full_of_food)
@@ -63,7 +73,7 @@ void	*to_start(void *data)
 		to_eat(philo);
 		print_status(SLEEPING, philo, DEBUG_MODE);
 		precise_usleep(philo->table->time_to_sleep, philo->table);
-		to_think(philo);
+		to_think(philo, 0);
 	}
 	return (NULL);
 }

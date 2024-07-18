@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 21:47:53 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:31:19 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@
 # define M 		"\033[1;35m"
 # define C 		"\033[1;36m"
 # define W 		"\033[1;37m"
-# define DEBUG_MODE	1
+# define DEBUG_MODE	0
+
 /* ************************************************************************** */
 /*                                 OPCODE                                     */
 /* ************************************************************************** */
-
 typedef enum e_status
 {
 	EATING,
@@ -130,7 +130,10 @@ long	to_time(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
 void	print_status(t_status status, t_philo *philo, int debug);
 int		no_dead(t_mtx *mutex, long *threads, long philo_nbr);
-void	to_increase(t_mtx *mutex, long *value); 
+void	to_increase(t_mtx *mutex, long *value);
 void	*to_monitor(void *data);
+void	to_clean(t_table *table);
+void	to_think(t_philo *philo, int to_detach);
+void	to_detach(t_philo *philo);
 
 #endif

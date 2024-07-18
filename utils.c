@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 21:47:51 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:31:54 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,21 @@ void	precise_usleep(long usec, t_table *table)
 			while (to_time(MICROSECOND) - start < usec)
 				;
 	}
+}
+
+void	to_clean(t_table *table)
+{
+	t_philo	*philo;
+	int		i;
+
+	i = -1;
+	while (++i < table->philo_nbr)
+	{
+		philo = table->philos + i;
+		mutex_handler(&philo->mtx, DESTROY);
+	}
+	mutex_handler(&table->write_mtx, DESTROY);
+	mutex_handler(&table->table_mtx, DESTROY);
+	free (table->forks);
+	free (table->philos);
 }

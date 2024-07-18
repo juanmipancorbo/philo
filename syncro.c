@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 21:47:48 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:20:07 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,18 @@ void	to_increase(t_mtx *mutex, long *value)
 	mutex_handler(mutex, LOCK);
 	(*value)++;
 	mutex_handler(mutex, UNLOCK);
+}
+
+void	to_detach(t_philo *philo)
+{
+	if (philo->table->philo_nbr % 2 == 0)
+	{
+		if (philo->id % 2 == 0)
+			precise_usleep(3e4, philo->table);
+	}
+	else
+	{
+		if (philo->id % 2)
+			to_think(philo, 1);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/17 21:53:52 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:30:52 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	main(int argc, char **argv)
 		to_parse(&table, argv);
 		to_init(&table);
 		to_dinner(&table);
+		to_clean(&table);
+		printf(M"Dining finished\n"RST);
 	}
 	else
 	{
@@ -35,4 +37,5 @@ int	main(int argc, char **argv)
 			W"      [nbr_philos] [t_die] [t_eat] [t_sleep]"C" [meals_limit]\n"
 			C"					       Optional"RST);
 	}
+	return (0);
 }
