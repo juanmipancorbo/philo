@@ -6,17 +6,11 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/18 21:30:52 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:55:45 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	to_exit(const char *error)
-{
-	printf(R"%s\n"RST, error);
-	exit(EXIT_FAILURE);
-}
 
 int	main(int argc, char **argv)
 {

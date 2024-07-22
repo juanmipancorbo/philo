@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/18 21:30:17 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:58:21 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ void	to_dinner(t_table *table)
 	i = -1;
 	while (++i < table->philo_nbr)
 		thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
-	to_set(&table->table_mtx, &table->end_simulation, 1);
+	to_set(&table->table_mtx, &table->end_time, 1);
 	thread_handler(&table->monitor, NULL, NULL, JOIN);
 }

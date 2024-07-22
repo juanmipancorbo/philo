@@ -6,20 +6,16 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/18 21:30:24 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:58:26 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*to_malloc(size_t bytes)
+void	to_exit(const char *error)
 {
-	void	*ret;
-
-	ret = malloc(bytes);
-	if (!ret)
-		to_exit("Malloc error.");
-	return (ret);
+	printf(R"%s\n"RST, error);
+	exit(EXIT_FAILURE);
 }
 
 static void	mutex_error(int status, t_opcode opcode)

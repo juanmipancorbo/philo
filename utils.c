@@ -6,11 +6,21 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/18 21:31:54 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:20:33 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	*to_malloc(size_t bytes)
+{
+	void	*ret;
+
+	ret = malloc(bytes);
+	if (!ret)
+		to_exit("Malloc error.");
+	return (ret);
+}
 
 long	to_time(t_time_code time_code)
 {
@@ -29,27 +39,6 @@ long	to_time(t_time_code time_code)
 	return (0);
 }
 
-void	precise_usleep(long usec, t_table *table)
-{
-	long	start;
-	long	elapsed;
-	long	time_left;
-
-	start = to_time(MICROSECOND);
-	while (to_time(MICROSECOND) - start < usec)
-	{
-		if (to_finish(table))
-			break ;
-		elapsed = to_time(MICROSECOND) - start;
-		time_left = usec - elapsed;
-		if (time_left > 1e3)
-			usleep(time_left / 2);
-		else
-			while (to_time(MICROSECOND) - start < usec)
-				;
-	}
-}
-
 void	to_clean(t_table *table)
 {
 	t_philo	*philo;
@@ -61,8 +50,25 @@ void	to_clean(t_table *table)
 		philo = table->philos + i;
 		mutex_handler(&philo->mtx, DESTROY);
 	}
-	mutex_handler(&table->write_mtx, DESTROY);
+	mutex_handler(&table->print_mtx, DESTROY);
 	mutex_handler(&table->table_mtx, DESTROY);
 	free (table->forks);
 	free (table->philos);
+}
+
+void	to_set(t_mtx *mutex, long *dst, long value)
+{
+	mutex_handler(mutex, LOCK);
+	*dst = value;
+	mutex_handler(mutex, UNLOCK);
+}
+
+long	to_get(t_mtx *mutex, long *value)
+{
+	long	ret;
+
+	mutex_handler(mutex, LOCK);
+	ret = *value;
+	mutex_handler(mutex, UNLOCK);
+	return (ret);
 }

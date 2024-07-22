@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/18 21:31:19 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:35:35 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
 /*                           ANSI ESCAPE SECUENCES                            */
 /* ************************************************************************** */
 # define RST		"\033[0m"
-# define R 		"\033[1;31m"
-# define G 		"\033[1;32m"
-# define Y 		"\033[1;33m"
-# define B 		"\033[1;34m"
-# define M 		"\033[1;35m"
-# define C 		"\033[1;36m"
-# define W 		"\033[1;37m"
+# define R 			"\033[1;31m"
+# define G 			"\033[1;32m"
+# define Y 			"\033[1;33m"
+# define B 			"\033[1;34m"
+# define M 			"\033[1;35m"
+# define C 			"\033[1;36m"
+# define W 			"\033[1;37m"
 # define DEBUG_MODE	0
 
 /* ************************************************************************** */
@@ -100,12 +100,12 @@ typedef struct s_table
 	long		time_to_sleep;
 	long		max_meals;
 	long		start_time;
-	long		end_simulation;
+	long		end_time;
 	long		threads_ready;
 	long		nbr_threads_running;
 	pthread_t	monitor;
 	t_mtx		table_mtx;
-	t_mtx		write_mtx;
+	t_mtx		print_mtx;
 	t_fork		*forks;
 	t_philo		*philos;
 }				t_table;
@@ -136,4 +136,4 @@ void	to_clean(t_table *table);
 void	to_think(t_philo *philo, int to_detach);
 void	to_detach(t_philo *philo);
 
-#endif
+#endif;

@@ -6,11 +6,32 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/18 21:20:07 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:19:44 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	precise_usleep(long usec, t_table *table)
+{
+	long	start;
+	long	elapsed;
+	long	time_left;
+
+	start = to_time(MICROSECOND);
+	while (to_time(MICROSECOND) - start < usec)
+	{
+		if (to_finish(table))
+			break ;
+		elapsed = to_time(MICROSECOND) - start;
+		time_left = usec - elapsed;
+		if (time_left > 1e3)
+			usleep(time_left / 2);
+		else
+			while (to_time(MICROSECOND) - start < usec)
+				;
+	}
+}
 
 void	to_wait(t_table *table)
 {
