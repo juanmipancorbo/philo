@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 18:58:41 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:27:47 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	to_parse(t_table *table, char **argv)
 static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
 {
 	int	philo_nbr;
-
+ 
 	philo_nbr = philo->table->philo_nbr;
 	if (philo->id % 2)
 	{

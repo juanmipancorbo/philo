@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 18:58:26 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:48:16 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	mutex_handler(t_mtx *mutex, t_opcode opcode)
 	else if (DESTROY == opcode)
 		mutex_error(pthread_mutex_destroy(mutex), opcode);
 	else
-		to_exit("Wrong opcode for \'mutex_handler\':\n"
-			"use <LOCK> <UNLOCK> <INIT> <DESTROY>");
+		to_exit("Wrong opcode for \'mutex_handler\'\n"
+			W"use <LOCK> <UNLOCK> <INIT> <DESTROY>"RST);
 }
 
 static void	thread_error(int status, t_opcode opcode)
@@ -89,6 +89,6 @@ void	thread_handler(pthread_t *thread, void *(*ft)(void *),
 	else if (DETACH == opcode)
 		thread_error(pthread_detach(*thread), opcode);
 	else
-		to_exit("Wrong opcode for \'thread_handler\':\n"
-			"use <CREATE> <JOIN> <DETACH>");
+		to_exit("Wrong opcode for \'thread_handler\'\n"
+			W"use <CREATE> <JOIN> <DETACH>"RST);
 }

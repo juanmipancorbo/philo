@@ -6,21 +6,21 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 19:25:29 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:27:59 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <stdio.h> // printf
-# include <stdlib.h> // malloc, free
-# include <unistd.h> // write, usleep
-# include <pthread.h> // mutex: init, destroy, lock, unlock
-						// threads: create, join, detach 
-# include <sys/time.h> // gettimeofday
-# include <limits.h> // INT_MAX
-# include <errno.h>
+# include <stdio.h> //printf
+# include <stdlib.h> //malloc, free
+# include <unistd.h> //write, usleep
+# include <pthread.h> //mutex: init, destroy, lock, unlock
+						//threads: create, join, detach 
+# include <sys/time.h> //gettimeofday
+# include <limits.h> //INT_MAX
+# include <errno.h> //error macros
 
 /* ************************************************************************** */
 /*                           ANSI ESCAPE SECUENCES                            */
