@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 18:35:35 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:25:29 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,4 @@ void	to_clean(t_table *table);
 void	to_think(t_philo *philo, int to_detach);
 void	to_detach(t_philo *philo);
 
-#endif;
+#endif
