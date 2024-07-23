@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 18:58:21 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:47:03 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,22 @@ void	to_think(t_philo *philo, int to_detach)
 	precise_usleep(t_think * 0.42, philo->table);
 }
 
-void	*to_alone(void *arg)
+static void	*to_alone(void *data)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)arg;
+	philo = (t_philo *)data;
 	to_wait(philo->table);
 	to_set(&philo->mtx, &philo->last_meal_time, to_time(MILLISECOND));
 	to_increase(&philo->table->table_mtx, &philo->table->nbr_threads_running);
+	mutex_handler(&philo->first_fork->mtx, LOCK);
 	print_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
 	while (!to_finish(philo->table))
 		usleep(200);
 	return (NULL);
 }
 
-void	to_eat(t_philo *philo)
+static void	to_eat(t_philo *philo)
 {
 	mutex_handler(&philo->first_fork->mtx, LOCK);
 	print_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
@@ -57,7 +58,7 @@ void	to_eat(t_philo *philo)
 	mutex_handler(&philo->second_fork->mtx, UNLOCK);
 }
 
-void	*to_start(void *data)
+static void	*to_start(void *data)
 {
 	t_philo	*philo;
 
@@ -83,9 +84,7 @@ void	to_dinner(t_table *table)
 	int	i;
 
 	i = -1;
-	if (table->max_meals == 0)
-		return ;
-	else if (table->philo_nbr == 1)
+	if (table->philo_nbr == 1)
 		thread_handler(&table->philos[0].thread_id, to_alone, &table->philos[0],
 			CREATE);
 	else

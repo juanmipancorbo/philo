@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 21:27:47 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:34:02 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,14 @@ static int	atol_check(char *str, int ms)
 	return (result);
 }
 
-void	to_parse(t_table *table, char **argv)
-{
-	int	i;
-
-	i = 0;
-	while (argv[i++])
-	{
-		table->philo_nbr = atol_check(argv[1], 0);
-		table->time_to_die = atol_check(argv[2], 1) * 1e3;
-		table->time_to_eat = atol_check(argv[3], 1) * 1e3;
-		table->time_to_sleep = atol_check(argv[4], 1) * 1e3;
-		if (argv[5])
-			table->max_meals = atol_check(argv[5], 0);
-	}
-}
-
 static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
 {
 	int	philo_nbr;
- 
+
 	philo_nbr = philo->table->philo_nbr;
-	if (philo->id % 2)
+	if (philo->table->philo_nbr == 1)
+		philo->first_fork = &forks[0];
+	else if (philo->id % 2)
 	{
 		philo->first_fork = &forks[(philo_position + 1) % philo_nbr];
 		philo->second_fork = &forks[philo_position];
@@ -90,7 +76,7 @@ static void	to_philos(t_table *table)
 	}
 }
 
-void	to_init(t_table *table)
+static void	to_init(t_table *table)
 {
 	int	i;
 
@@ -108,4 +94,21 @@ void	to_init(t_table *table)
 		table->forks[i].id = i;
 	}
 	to_philos(table);
+}
+
+void	to_parse(t_table *table, char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i++])
+	{
+		table->philo_nbr = atol_check(argv[1], 0);
+		table->time_to_die = atol_check(argv[2], 1) * 1e3;
+		table->time_to_eat = atol_check(argv[3], 1) * 1e3;
+		table->time_to_sleep = atol_check(argv[4], 1) * 1e3;
+		if (argv[5])
+			table->max_meals = atol_check(argv[5], 0);
+	}
+	to_init(table);
 }

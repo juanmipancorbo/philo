@@ -6,12 +6,12 @@
 #    By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/22 19:30:49 by jpancorb          #+#    #+#              #
-#    Updated: 2024/07/22 19:36:25 by jpancorb         ###   ########.fr        #
+#    Updated: 2024/07/23 20:16:04 by jpancorb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= philo
-SRCS	= dinner.c error.c init.c main.c monitor_print.c syncro.c utils.c
+SRCS	= dinner.c handlers.c parser.c main.c monitor.c syncro.c utils.c
 HEADER	= philo.h
 CFLAGS	= -Wall -Werror -Wextra 
 
