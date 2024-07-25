@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/22 19:19:44 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:31:12 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	to_wait(t_table *table)
 		;
 }
 
-int	no_dead(t_mtx *mutex, long *threads, long philo_nbr)
+int	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr)
 {
 	int	ret;
 

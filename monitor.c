@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 20:29:02 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/23 18:36:27 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:13:12 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	*to_monitor(void *data)
 	t_table	*table;
 
 	table = (t_table *)data;
-	while (!no_dead(&table->table_mtx, &table->nbr_threads_running,
+	while (!all_threads_running(&table->table_mtx, &table->nbr_threads_running,
 			table->philo_nbr))
 		;
 	while (!to_finish(table))

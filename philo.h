@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/23 19:20:07 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:11:56 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	to_wait(t_table *table);
 long	to_time(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
 void	print_status(t_status status, t_philo *philo, int debug);
-int		no_dead(t_mtx *mutex, long *threads, long philo_nbr);
+int		all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
 void	to_increase(t_mtx *mutex, long *value);
 void	*to_monitor(void *data);
 void	to_clean(t_table *table);

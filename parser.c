@@ -6,13 +6,13 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/23 20:34:02 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:25:12 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	atol_check(char *str, int ms)
+static int	atol_check(char *str, int type_arg)
 {
 	size_t	i;
 	long	result;
@@ -32,9 +32,11 @@ static int	atol_check(char *str, int ms)
 	}
 	if (result == 0)
 		to_exit("Values cannot be 0.");
+	if (type_arg == 0 && result > 1000)
+		to_exit("The number of philosophers should not exceed 1000.");
 	if (result > INT_MAX || i > 10)
 		to_exit("Values cannot exceed INT_MAX.");
-	if (ms && result < 60)
+	if (type_arg == 1 && result < 60)
 		to_exit("Values cannot be less than 60 ms.");
 	return (result);
 }
@@ -108,7 +110,7 @@ void	to_parse(t_table *table, char **argv)
 		table->time_to_eat = atol_check(argv[3], 1) * 1e3;
 		table->time_to_sleep = atol_check(argv[4], 1) * 1e3;
 		if (argv[5])
-			table->max_meals = atol_check(argv[5], 0);
+			table->max_meals = atol_check(argv[5], 2);
 	}
 	to_init(table);
 }
