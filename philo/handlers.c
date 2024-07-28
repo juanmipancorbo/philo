@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 12:41:44 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:51:46 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static char	*thread_error(int status, t_opcode opcode)
 {
 	char	*err;
 
+	err = NULL;
 	if (status == 0)
 		return (NULL);
 	if (EAGAIN == status)
@@ -81,6 +82,7 @@ char	*thread_handler(pthread_t *thread, void *(*ft)(void *),
 {
 	char	*err;
 
+	err = NULL;
 	if (CREATE == opcode)
 		err = thread_error(pthread_create(thread, NULL, ft, data), opcode);
 	else if (JOIN == opcode)

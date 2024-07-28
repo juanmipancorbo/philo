@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 11:49:40 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:25:48 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	to_exit(const char *error, t_table *table)
 {
 	printf(R"%s\n"RST, error);
-	to_clean(&table);
+	to_clean(table);
 	return (1);
 }
 
@@ -40,5 +40,9 @@ int	main(int argc, char **argv)
 			&table);
 		return (1);
 	}
+	int *arr = malloc(10 * sizeof(int));
+	arr[10] = 0;
+	free(arr);
+
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:04:16 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:05:55 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 						//threads: create, join, detach 
 # include <sys/time.h> //gettimeofday
 # include <limits.h> //INT_MAX
+# include <string.h> // memset
 # include <errno.h> //error macros
 
 /* ************************************************************************** */
@@ -128,7 +129,8 @@ long	to_time(t_time_code time_code, t_table *table);
 void	precise_usleep(long usec, t_table *table);
 void	print_status(t_status status, t_philo *philo, int debug,
 			t_table *table);
-int		all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
+int		all_threads_running(t_mtx *mutex, long *threads, long philo_nbr,
+			t_table *table);
 void	to_increase(t_mtx *mutex, long *value, t_table *table);
 void	*to_monitor(void *data);
 void	to_clean(t_table *table);

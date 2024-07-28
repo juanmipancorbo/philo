@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 20:29:02 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:05:47 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:57:26 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ static int	to_die(t_philo *philo)
 {
 	long	elapsed;
 
-	if (to_get(&philo->mtx, &philo->full_of_food))
+	if (to_get(&philo->mtx, &philo->full_of_food, philo->table))
 		return (0);
-	elapsed = to_time(MILLISECOND) - to_get(&philo->mtx,
-			&philo->last_meal_time);
+	elapsed = to_time(MILLISECOND, philo->table) - to_get(&philo->mtx,
+			&philo->last_meal_time, philo->table);
 	if (elapsed > (philo->table->time_to_die / 1e3))
 		return (1);
 	return (0);
@@ -87,7 +87,7 @@ void	*to_monitor(void *data)
 
 	table = (t_table *)data;
 	while (!all_threads_running(&table->table_mtx, &table->nbr_threads_running,
-			table->philo_nbr))
+			table->philo_nbr, table))
 		;
 	while (!to_finish(table))
 	{
@@ -96,8 +96,8 @@ void	*to_monitor(void *data)
 		{
 			if (to_die(table->philos + i))
 			{
-				to_set(&table->table_mtx, &table->end_time, 1);
-				print_status(DIED, table->philos + i, DEBUG_MODE);
+				to_set(&table->table_mtx, &table->end_time, 1, table);
+				print_status(DIED, table->philos + i, DEBUG_MODE, table);
 			}
 		}
 	}

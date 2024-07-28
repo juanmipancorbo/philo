@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:45:25 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:14:32 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	*to_malloc(size_t bytes, t_table *table)
 	ret = malloc(bytes);
 	if (!ret)
 		to_exit("Malloc error.", table);
+	memset(ret, 0, bytes);
 	return (ret);
 }
 
@@ -50,12 +51,6 @@ void	to_clean(t_table *table)
 		philo = table->philos + i;
 		mutex_handler(&philo->mtx, DESTROY, table);
 		mutex_handler(&table->forks[i].mtx, DESTROY, table);
-		if (philo->first_fork)
-			free (philo->first_fork);
-		if (philo->second_fork)
-			free (philo->second_fork);
-		if (philo->table)
-			free (philo->table);
 	}
 	mutex_handler(&table->table_mtx, DESTROY, table);
 	mutex_handler(&table->print_mtx, DESTROY, table);
