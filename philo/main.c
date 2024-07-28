@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 14:25:48 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:34:06 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ int	main(int argc, char **argv)
 			&table);
 		return (1);
 	}
-	int *arr = malloc(10 * sizeof(int));
-	arr[10] = 0;
-	free(arr);
 
 	return (0);
 }

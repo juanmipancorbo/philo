@@ -6,11 +6,17 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:51:46 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:24:37 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	to_error(char *err, t_table *table)
+{
+	if (err)
+		to_exit(err, table);
+}
 
 static void	mutex_error(int status, t_opcode opcode, t_table *table)
 {
@@ -65,7 +71,7 @@ static char	*thread_error(int status, t_opcode opcode)
 	{
 		if (CREATE == opcode)
 			err = "The value especified by attr is invalid.";
-		else if (JOIN == opcode || DETACH == opcode)
+		else if (JOIN == opcode)
 			err = "The value especified by thread is not joinable.";
 	}
 	else if (ESRCH == status)
@@ -87,7 +93,5 @@ char	*thread_handler(pthread_t *thread, void *(*ft)(void *),
 		err = thread_error(pthread_create(thread, NULL, ft, data), opcode);
 	else if (JOIN == opcode)
 		err = thread_error(pthread_join(*thread, NULL), opcode);
-	else if (DETACH == opcode)
-		err = thread_error(pthread_detach(*thread), opcode);
 	return (err);
 }

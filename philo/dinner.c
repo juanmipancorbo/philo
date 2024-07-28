@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:27:09 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:25:37 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,25 @@ void	to_dinner(t_table *table)
 	char	*err;
 
 	i = -1;
+	err = NULL;
 	if (table->philo_nbr == 1)
 		err = thread_handler(&table->philos[0].thread_id, to_alone,
 				&table->philos[0], CREATE);
-	else
-		while (++i < table->philo_nbr)
+	to_error(err, table);
+	if (table->philo_nbr > 1)
+		while (++i < table->philo_nbr && !err)
 			err = thread_handler(&table->philos[i].thread_id, to_start,
 					&table->philos[i], CREATE);
+	to_error(err, table);
 	err = thread_handler(&table->monitor, to_monitor, table, CREATE);
+	to_error(err, table);
 	table->start_time = to_time(MILLISECOND, table);
 	to_set(&table->table_mtx, &table->threads_ready, 1, table);
 	i = -1;
-	while (++i < table->philo_nbr)
+	while (++i < table->philo_nbr && !err)
 		err = thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
+	to_error(err, table);
 	to_set(&table->table_mtx, &table->end_time, 1, table);
 	err = thread_handler(&table->monitor, NULL, NULL, JOIN);
-	if (err)
-		to_exit(err, table);
+	to_error(err, table);
 }

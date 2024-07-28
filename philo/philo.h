@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 14:05:55 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:24:33 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h> //malloc, free
 # include <unistd.h> //write, usleep
 # include <pthread.h> //mutex: init, destroy, lock, unlock
-						//threads: create, join, detach 
+						//threads: create, join
 # include <sys/time.h> //gettimeofday
 # include <limits.h> //INT_MAX
 # include <string.h> // memset
@@ -57,7 +57,6 @@ typedef enum e_opcode
 	DESTROY,
 	CREATE,
 	JOIN,
-	DETACH,
 }				t_opcode;
 
 typedef enum e_time_code
@@ -136,5 +135,6 @@ void	*to_monitor(void *data);
 void	to_clean(t_table *table);
 void	to_think(t_philo *philo, int to_detach);
 void	to_detach(t_philo *philo);
+void	to_error(char *err, t_table *table);
 
 #endif
