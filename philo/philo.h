@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/25 18:11:56 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:04:16 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,21 +114,22 @@ typedef struct s_table
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 void	to_parse(t_table *table, char **argv);
-void	to_exit(const char *error);
-void	*to_malloc(size_t bytes);
-void	mutex_handler(t_mtx *mutex, t_opcode opcode);
-void	thread_handler(pthread_t *thread, void *(*ft)(void *),
+int		to_exit(const char *error, t_table *table);
+void	*to_malloc(size_t bytes, t_table *table);
+void	mutex_handler(t_mtx *mutex, t_opcode opcode, t_table *table);
+char	*thread_handler(pthread_t *thread, void *(*ft)(void *),
 			void *data, t_opcode opcode);
 void	to_dinner(t_table *table);
-void	to_set(t_mtx *mutex, long *dst, long value);
-long	to_get(t_mtx *mutex, long *value);
+void	to_set(t_mtx *mutex, long *dst, long value, t_table *table);
+long	to_get(t_mtx *mutex, long *value, t_table *table);
 int		to_finish(t_table *table);
 void	to_wait(t_table *table);
-long	to_time(t_time_code time_code);
+long	to_time(t_time_code time_code, t_table *table);
 void	precise_usleep(long usec, t_table *table);
-void	print_status(t_status status, t_philo *philo, int debug);
+void	print_status(t_status status, t_philo *philo, int debug,
+			t_table *table);
 int		all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
-void	to_increase(t_mtx *mutex, long *value);
+void	to_increase(t_mtx *mutex, long *value, t_table *table);
 void	*to_monitor(void *data);
 void	to_clean(t_table *table);
 void	to_think(t_philo *philo, int to_detach);

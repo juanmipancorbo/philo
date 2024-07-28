@@ -6,89 +6,86 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:09:16 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/25 22:25:59 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 12:41:44 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	to_exit(const char *error)
-{
-	printf(R"%s\n"RST, error);
-	exit(EXIT_FAILURE);
-}
-
-static void	mutex_error(int status, t_opcode opcode)
+static void	mutex_error(int status, t_opcode opcode, t_table *table)
 {
 	if (status == 0)
 		return ;
 	if (EINVAL == status)
 	{
 		if (LOCK == opcode || UNLOCK == opcode || DESTROY == opcode)
-			to_exit("The value especified by mutex is invalid.");
+			to_exit("The value especified by mutex is invalid.", table);
 		else if (INIT == opcode)
-			to_exit("The value especified by attr is invalid.");
+			to_exit("The value especified by attr is invalid.", table);
 	}
 	else if (EDEADLK == status)
 		to_exit("A deadlock would occur if the thread blocked "
-			"waiting for mutex.");
+			"waiting for mutex.", table);
 	else if (EPERM == status)
-		to_exit("The current thread does not hold a lock on mutex.");
+		to_exit("The current thread does not hold a lock on mutex.", table);
 	else if (ENOMEM == status)
 		to_exit("The process cannot allocate enough memory to "
-			"create another mutex.");
+			"create another mutex.", table);
 	else if (EBUSY == status)
-		to_exit("Mutex is locked.");
+		to_exit("Mutex is locked.", table);
 }
 
-void	mutex_handler(t_mtx *mutex, t_opcode opcode)
+void	mutex_handler(t_mtx *mutex, t_opcode opcode, t_table *table)
 {
 	if (LOCK == opcode)
-		mutex_error(pthread_mutex_lock(mutex), opcode);
+		mutex_error(pthread_mutex_lock(mutex), opcode, table);
 	else if (UNLOCK == opcode)
-		mutex_error(pthread_mutex_unlock(mutex), opcode);
+		mutex_error(pthread_mutex_unlock(mutex), opcode, table);
 	else if (INIT == opcode)
-		mutex_error(pthread_mutex_init(mutex, NULL), opcode);
+		mutex_error(pthread_mutex_init(mutex, NULL), opcode, table);
 	else if (DESTROY == opcode)
-		mutex_error(pthread_mutex_destroy(mutex), opcode);
+		mutex_error(pthread_mutex_destroy(mutex), opcode, table);
 	else
 		to_exit("Wrong opcode for \'mutex_handler\'\n"
-			W"use <LOCK> <UNLOCK> <INIT> <DESTROY>"RST);
+			W"use <LOCK> <UNLOCK> <INIT> <DESTROY>"RST, table);
 }
 
-static void	thread_error(int status, t_opcode opcode)
+static char	*thread_error(int status, t_opcode opcode)
 {
+	char	*err;
+
 	if (status == 0)
-		return ;
+		return (NULL);
 	if (EAGAIN == status)
-		to_exit("No resources to create another thread.");
+		err = "No resources to create another thread.";
 	else if (EPERM == status)
-		to_exit("The caller does not have appropriate permission.");
+		err = "The caller does not have appropriate permission.";
 	else if (EINVAL == status)
 	{
 		if (CREATE == opcode)
-			to_exit("The value especified by attr is invalid.");
+			err = "The value especified by attr is invalid.";
 		else if (JOIN == opcode || DETACH == opcode)
-			to_exit("The value especified by thread is not joinable.");
+			err = "The value especified by thread is not joinable.";
 	}
 	else if (ESRCH == status)
-		to_exit("No thread could be found corresponding to that specified "
-			"by the given thread ID, thread.");
+		err = "No thread could be found corresponding to that specified "
+			"by the given thread ID, thread.";
 	else if (EDEADLK == status)
-		to_exit("A deadlock was detected or the value of thread specifies the "
-			"calling thread.");
+		err = "A deadlock was detected or the value of thread specifies the "
+			"calling thread.";
+	return (err);
 }
 
-void	thread_handler(pthread_t *thread, void *(*ft)(void *),
+char	*thread_handler(pthread_t *thread, void *(*ft)(void *),
 						void *data, t_opcode opcode)
 {
+	char	*err;
+
 	if (CREATE == opcode)
-		thread_error(pthread_create(thread, NULL, ft, data), opcode);
+		err = thread_error(pthread_create(thread, NULL, ft, data), opcode);
 	else if (JOIN == opcode)
-		thread_error(pthread_join(*thread, NULL), opcode);
+		err = thread_error(pthread_join(*thread, NULL), opcode);
 	else if (DETACH == opcode)
-		thread_error(pthread_detach(*thread), opcode);
-	else
-		to_exit("Wrong opcode for \'thread_handler\'\n"
-			W"use <CREATE> <JOIN> <DETACH>"RST);
+		err = thread_error(pthread_detach(*thread), opcode);
+	return (err);
 }

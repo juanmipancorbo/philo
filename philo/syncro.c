@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/25 19:31:12 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:20:32 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,24 @@ void	precise_usleep(long usec, t_table *table)
 	long	elapsed;
 	long	time_left;
 
-	start = to_time(MICROSECOND);
-	while (to_time(MICROSECOND) - start < usec)
+	start = to_time(MICROSECOND, table);
+	while (to_time(MICROSECOND, table) - start < usec)
 	{
 		if (to_finish(table))
 			break ;
-		elapsed = to_time(MICROSECOND) - start;
+		elapsed = to_time(MICROSECOND, table) - start;
 		time_left = usec - elapsed;
 		if (time_left > 1e3)
 			usleep(time_left / 2);
 		else
-			while (to_time(MICROSECOND) - start < usec)
+			while (to_time(MICROSECOND, table) - start < usec)
 				;
 	}
 }
 
 void	to_wait(t_table *table)
 {
-	while (!to_get(&table->table_mtx, &table->threads_ready))
+	while (!to_get(&table->table_mtx, &table->threads_ready, table))
 		;
 }
 
@@ -51,11 +51,11 @@ int	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr)
 	return (ret);
 }
 
-void	to_increase(t_mtx *mutex, long *value)
+void	to_increase(t_mtx *mutex, long *value, t_table *table)
 {
-	mutex_handler(mutex, LOCK);
+	mutex_handler(mutex, LOCK, table);
 	(*value)++;
-	mutex_handler(mutex, UNLOCK);
+	mutex_handler(mutex, UNLOCK, table);
 }
 
 void	to_detach(t_philo *philo)

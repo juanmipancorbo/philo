@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 20:29:02 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/25 18:13:12 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:05:47 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 int	to_finish(t_table *table)
 {
-	return (to_get(&table->table_mtx, &table->end_time));
+	return (to_get(&table->table_mtx, &table->end_time, table));
 }
 
-static void	print_status_debug(t_status status, t_philo *philo, long elapsed)
+static void	print_status_debug(t_status status, t_philo *philo, long elapsed,
+	t_table *table)
 {
 	if (!to_finish(philo->table))
 	{
@@ -37,19 +38,19 @@ static void	print_status_debug(t_status status, t_philo *philo, long elapsed)
 	}
 	else if (DIED == status)
 		printf(R"%-6ld"C" %d died\n"RST, elapsed, philo->id);
-	mutex_handler(&philo->table->table_mtx, UNLOCK);
+	mutex_handler(&philo->table->table_mtx, UNLOCK, table);
 }
 
-void	print_status(t_status status, t_philo *philo, int debug)
+void	print_status(t_status status, t_philo *philo, int debug, t_table *table)
 {
 	long	elapsed;
 
-	elapsed = to_time(MILLISECOND) - philo->table->start_time;
+	elapsed = to_time(MILLISECOND, table) - philo->table->start_time;
 	if (philo->full_of_food)
 		return ;
-	mutex_handler(&philo->table->print_mtx, LOCK);
+	mutex_handler(&philo->table->print_mtx, LOCK, table);
 	if (debug)
-		print_status_debug(status, philo, elapsed);
+		print_status_debug(status, philo, elapsed, table);
 	else if (!to_finish(philo->table))
 	{
 		if (TAKE_FIRST_FORK == status || TAKE_SECOND_FORK == status)
@@ -63,7 +64,7 @@ void	print_status(t_status status, t_philo *philo, int debug)
 	}
 	else if (DIED == status)
 		printf(R"%-6ld"C" %d died\n"RST, elapsed, philo->id);
-	mutex_handler(&philo->table->print_mtx, UNLOCK);
+	mutex_handler(&philo->table->print_mtx, UNLOCK, table);
 }
 
 static int	to_die(t_philo *philo)
