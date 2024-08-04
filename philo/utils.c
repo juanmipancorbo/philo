@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/03 00:38:24 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:41:58 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,25 @@ void	to_clean(t_table *table)
 	free (table->philos);
 }
 
-void	to_set(t_mtx *mutex, long *dst, long value, t_table *table)
+int	to_set(t_mtx *mutex, long *dst, long value, t_table *table)
 {
-	mutex_handler(mutex, LOCK, table);
+	if (pthread_mutex_lock(mutex))
+		return (to_exit("Mutex LOCK error."));
 	*dst = value;
-	mutex_handler(mutex, UNLOCK, table);
+	if (pthread_mutex_unlock(mutex))
+		return (to_exit("Mutex UNLOCK error."));
+	else
+		return (0);
 }
 
 long	to_get(t_mtx *mutex, long *value, t_table *table)
 {
 	long	ret;
 
-	mutex_handler(mutex, LOCK, table);
+	if (pthread_mutex_lock(mutex))
+		return (to_exit("Mutex LOCK error."));
 	ret = *value;
-	mutex_handler(mutex, UNLOCK, table);
+	if (pthread_mutex_unlock(mutex))
+		return (to_exit("Mutex UNLOCK error."));
 	return (ret);
 }

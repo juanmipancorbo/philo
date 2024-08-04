@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 15:01:04 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:05:18 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_table
 	long		time_to_sleep;
 	long		max_meals;
 	long		start_time;
-	long		end_time;
+	long		end;
 	long		threads_ready;
 	long		nbr_threads_running;
 	pthread_t	monitor;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 20:29:02 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/29 18:16:52 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:20:34 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	to_finish(t_table *table)
 {
-	return (to_get(&table->table_mtx, &table->end_time, table));
+	return (to_get(&table->table_mtx, &table->end, table));
 }
 
 static void	print_status_debug(t_status status, t_philo *philo, long elapsed,
@@ -96,7 +96,7 @@ void	*to_monitor(void *data)
 		{
 			if (to_die(table->philos + i))
 			{
-				to_set(&table->table_mtx, &table->end_time, 1, table);
+				to_set(&table->table_mtx, &table->end, 1, table);
 				print_status(DIED, table->philos + i, DEBUG_MODE, table);
 			}
 		}

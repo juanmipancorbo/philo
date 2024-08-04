@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syncro.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:57:55 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:57:54 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ void	precise_usleep(long usec, t_table *table)
 	}
 }
 
-void	to_wait(t_table *table)
+int	to_wait(t_table *table)
 {
 	while (!to_get(&table->table_mtx, &table->threads_ready, table))
 		;
+	if (to_get(&table->table_mtx, &table->threads_ready, table == 1))
+		return (0);
+	else
+		return (-1);
 }
 
 int	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr,
@@ -52,11 +56,15 @@ int	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr,
 	return (ret);
 }
 
-void	to_increase(t_mtx *mutex, long *value, t_table *table)
+int	to_increase(t_mtx *mutex, long *value, char *error, t_table *table)
 {
-	mutex_handler(mutex, LOCK, table);
+	if (pthread_mutex_lock(mutex))
+		return (to_exit("Mutex LOCK error."));
 	(*value)++;
-	mutex_handler(mutex, UNLOCK, table);
+	if (pthread_mutex_unlock(mutex))
+		return (to_exit("Mutex UNLOCK error."));
+	else
+		return (0);
 }
 
 void	to_detach(t_philo *philo)

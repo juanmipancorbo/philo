@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 15:23:50 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:14:10 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	atol_check(char *str, int type_arg)
 		result = to_exit("Values cannot exceed INT_MAX.", NULL);
 	if (type_arg == 1 && result < 60)
 		result = to_exit("Values cannot be less than 60 ms.", NULL);
-	return  (result);
+	return (result);
 }
 
 static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
@@ -85,7 +85,7 @@ static int	to_init(t_table *table)
 	int	i;
 
 	i = -1;
-	// table->end_time = 0;
+	// table->end = 0;
 	// table->threads_ready = 0;
 	// table->nbr_threads_running = 0;
 	// table->monitor = 0;

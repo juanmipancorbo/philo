@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 15:23:47 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:23:20 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,19 @@ static void	*to_alone(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	to_wait(philo->table);
-	to_set(&philo->mtx, &philo->last_meal_time,
-		to_time(MILLISECOND, philo->table), philo->table);
-	to_increase(&philo->table->table_mtx, &philo->table->nbr_threads_running,
-		philo->table);
+	if (to_wait(philo->table) == -1)
+		return ((void *)-1);
+	if (to_set(&philo->mtx, &philo->last_meal_time,
+			to_time(MILLISECOND, philo->table), philo->table == -1))
+		return ((void *)-1);
+	if (to_increase(&philo->table->table_mtx,
+			&philo->table->nbr_threads_running, philo->table))
+		return ((void *)-1);
 	print_status(TAKE_FIRST_FORK, philo, DEBUG_MODE, philo->table);
 	while (!to_finish(philo->table))
 		usleep(200);
+	if (to_finish(philo->table) == -1)
+		return ((void *)-1);
 	return (NULL);
 }
 
@@ -65,11 +70,14 @@ static void	*to_start(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	to_wait(philo->table);
-	to_set(&philo->mtx, &philo->last_meal_time,
-		to_time(MILLISECOND, philo->table), philo->table);
-	to_increase(&philo->table->table_mtx, &philo->table->nbr_threads_running,
-		philo->table);
+	if (to_wait(philo->table))
+		return ((void *)-1);
+	if (to_set(&philo->mtx, &philo->last_meal_time,
+			to_time(MILLISECOND, philo->table), philo->table == -1))
+		return ((void *)-1);
+	if (to_increase(&philo->table->table_mtx,
+			&philo->table->nbr_threads_running, philo->table))
+		return ((void *)-1);
 	to_detach(philo);
 	while (!to_finish(philo->table))
 	{
@@ -80,6 +88,8 @@ static void	*to_start(void *data)
 		precise_usleep(philo->table->time_to_sleep, philo->table);
 		to_think(philo, 0);
 	}
+	if (to_finish(philo->table) == -1)
+		return ((void *)-1);
 	return (NULL);
 }
 
@@ -105,8 +115,7 @@ int	to_dinner(t_table *table)
 	while (++i < table->philo_nbr && !err)
 		if (thread_join(&table->philos[i].thread_id, NULL))
 			to_error("Thread JOIN error (philos[%d].thread_id).", i);
-	to_set(&table->table_mtx, &table->end_time, 1, table);
+	to_set(&table->table_mtx, &table->end, 1, table);
 	if (thread_join(&table->monitor, NULL))
 		to_error("Thread JOIN error (table->monitor).");
-	thread_handler(&table->monitor, NULL, NULL, JOIN);
 }
