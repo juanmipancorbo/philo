@@ -12,17 +12,6 @@
 
 #include "philo.h"
 
-void	*to_malloc(size_t bytes, t_table *table)
-{
-	void	*ret;
-
-	ret = malloc(bytes);
-	if (!ret)
-		to_exit("Malloc error.", table);
-	memset(ret, 0, bytes);
-	return (ret);
-}
-
 long	to_time(t_time_code time_code, t_table *table)
 {
 	struct timeval	time;

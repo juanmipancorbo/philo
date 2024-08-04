@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/03 00:38:51 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:23:50 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	atol_check(char *str, int type_arg)
 		result = to_exit("Values cannot exceed INT_MAX.", NULL);
 	if (type_arg == 1 && result < 60)
 		result = to_exit("Values cannot be less than 60 ms.", NULL);
-	return (result);
+	return  (result);
 }
 
 static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
@@ -74,12 +74,13 @@ static void	to_philos(t_table *table)
 		philo->meals_count = 0;
 		philo->thread_id = 0;
 		philo->table = table;
-		mutex_handler(&philo->mtx, INIT, table);
+		if (pthread_mutex_init(&philo->mtx, NULL))
+			return (to_exit("Mutex INIT error (philo[%d].mtx).", i + 1));
 		to_forks(philo, table->forks, i);
 	}
 }
 
-static void	to_init(t_table *table)
+static int	to_init(t_table *table)
 {
 	int	i;
 
@@ -88,13 +89,20 @@ static void	to_init(t_table *table)
 	// table->threads_ready = 0;
 	// table->nbr_threads_running = 0;
 	// table->monitor = 0;
-	table->philos = to_malloc(sizeof(t_philo) * table->philo_nbr, table);
+	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
+	if (!table->philos)
+		return (to_exit("Malloc error."));
 	table->forks = to_malloc(sizeof(t_fork) * table->philo_nbr, table);
-	mutex_handler(&table->table_mtx, INIT, table);
-	mutex_handler(&table->print_mtx, INIT, table);
+	if (!table->forks)
+		return (to_exit("Malloc error."));
+	if (pthread_mutex_init(&table->table_mtx, NULL))
+		return (to_exit("Mutex INIT error (table_mtx)."));
+	if (pthread_mutex_init(&table->print_mtx, NULL))
+		return (to_exit("Mutex INIT error (print_mtx)."));
 	while (++i < table->philo_nbr)
 	{
-		mutex_handler(&table->forks[i].mtx, INIT, table);
+		if (pthread_mutex_init(&table->forks[i].mtx, NULL))
+			return (to_exit("Mutex INIT error (forks[%d].mtx).", i));
 		table->forks[i].id = i;
 	}
 	to_philos(table);
@@ -120,6 +128,7 @@ int	to_parse(t_table *table, char **argv)
 		if (table->max_meals < 0)
 			return (1);
 	}
-	to_init(table);
+	if (to_init(table))
+		return (1);
 	return (0);
 }

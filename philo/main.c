@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/03 00:36:54 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:23:49 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(int argc, char **argv)
 	{
 		if (to_parse(&table, argv))
 			return (1);
-		to_dinner(&table);
+		if (to_dinner(&table))
+			return (1);
 		to_clean(&table);
 		printf(M"Dinner finished\n"RST);
 	}
@@ -38,10 +39,8 @@ int	main(int argc, char **argv)
 			W"Try: \"""./philo"Y" 4 "G"900 300 300 "C"4"W"\"\n"
 			W"[Program] "Y"[nbr_philos] "G"[t_die] [t_eat] [t_sleep]"
 			C" [meals_limit]\n"
-			G"			  all in milliseconds"C"      Optional"RST, 
-				NULL);
+			G"			  all in milliseconds"C"      Optional"RST, NULL);
 		return (1);
 	}
-
 	return (0);
 }

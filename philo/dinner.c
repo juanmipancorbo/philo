@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/02 23:17:35 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:23:47 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,31 +83,30 @@ static void	*to_start(void *data)
 	return (NULL);
 }
 
-void	to_dinner(t_table *table)
+int	to_dinner(t_table *table)
 {
 	int		i;
-	char	*err;
 
 	i = -1;
-	err = NULL;
 	if (table->philo_nbr == 1)
-		err = thread_handler(&table->philos[0].thread_id, to_alone,
-				&table->philos[0], CREATE);
-	to_error(err, table);
+		if (pthread_create(&table->philos[0], NULL, to_alone,
+				&table->philos[0]))
+			to_error("Thread CREATE error (philo[0]).");
 	if (table->philo_nbr > 1)
-		while (++i < table->philo_nbr && !err)
-		{
-			err = thread_handler(&table->philos[i].thread_id, to_start,
-				&table->philos[i], CREATE);
-			to_error(err, table);
-		}
-	err = thread_handler(&table->monitor, to_monitor, table, CREATE);
-	to_error(err, table);
+		while (++i < table->philo_nbr)
+			if (thread_create(&table->philos[i].thread_id, NULL, to_start,
+					&table->philos[i]))
+				to_error("Thread CREATE error (philos[%d].thread_id).", i);
+	if (thread_create(&table->monitor, NULL, to_monitor, table))
+		to_error("Thread CREATE error (table->monitor).");
 	table->start_time = to_time(MILLISECOND, table);
 	to_set(&table->table_mtx, &table->threads_ready, 1, table);
 	i = -1;
 	while (++i < table->philo_nbr && !err)
-		thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
+		if (thread_join(&table->philos[i].thread_id, NULL))
+			to_error("Thread JOIN error (philos[%d].thread_id).", i);
 	to_set(&table->table_mtx, &table->end_time, 1, table);
+	if (thread_join(&table->monitor, NULL))
+		to_error("Thread JOIN error (table->monitor).");
 	thread_handler(&table->monitor, NULL, NULL, JOIN);
 }

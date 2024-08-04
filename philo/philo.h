@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
+/*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/03 00:39:11 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:01:04 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/time.h> //gettimeofday
 # include <limits.h> //INT_MAX
 # include <string.h> // memset
-# include <errno.h> //error macros
+//# include <errno.h> //error macros
 
 /* ************************************************************************** */
 /*                           ANSI ESCAPE SECUENCES                            */
@@ -116,11 +116,9 @@ typedef struct s_table
 /* ************************************************************************** */
 int		to_parse(t_table *table, char **argv);
 int		to_exit(const char *error, t_table *table);
-void	*to_malloc(size_t bytes, t_table *table);
-void	mutex_handler(t_mtx *mutex, t_opcode opcode, t_table *table);
 char	*thread_handler(pthread_t *thread, void *(*ft)(void *),
 			void *data, t_opcode opcode);
-void	to_dinner(t_table *table);
+int		to_dinner(t_table *table);
 void	to_set(t_mtx *mutex, long *dst, long value, t_table *table);
 long	to_get(t_mtx *mutex, long *value, t_table *table);
 int		to_finish(t_table *table);
