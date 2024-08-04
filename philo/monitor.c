@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 20:29:02 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 13:57:26 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:16:52 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,21 @@ static void	print_status_debug(t_status status, t_philo *philo, long elapsed,
 	if (!to_finish(philo->table))
 	{
 		if (TAKE_FIRST_FORK == status)
-			printf(W"%-6ld"RST" %d has taken the first fork [%d]\n",
+			printf(W "%-6ld" RST" %d has taken the first fork [%d]\n",
 				elapsed, philo->id, philo->first_fork->id);
 		else if (TAKE_SECOND_FORK == status)
-			printf(W"%-6ld"RST" %d has taken the second fork [%d]\n",
+			printf(W "%-6ld" RST" %d has taken the second fork [%d]\n",
 				elapsed, philo->id, philo->second_fork->id);
 		else if (EATING == status)
-			printf(W"%-6ld"C" %d is eating [%ld meals eaten]\n"RST,
+			printf(W "%-6ld"C" %d is eating [%ld meals eaten]\n" RST,
 				elapsed, philo->id, philo->meals_count);
 		else if (SLEEPING == status)
-			printf(W"%-6ld"RST" %d is sleeping\n"RST, elapsed, philo->id);
+			printf(W "%-6ld" RST" %d is sleeping\n" RST, elapsed, philo->id);
 		else if (THINKING == status)
-			printf(W"%-6ld"RST" %d is thinking\n"RST, elapsed, philo->id);
+			printf(W "%-6ld" RST" %d is thinking\n" RST, elapsed, philo->id);
 	}
 	else if (DIED == status)
-		printf(R"%-6ld"C" %d died\n"RST, elapsed, philo->id);
+		printf(R "%-6ld"C" %d died\n" RST, elapsed, philo->id);
 	mutex_handler(&philo->table->table_mtx, UNLOCK, table);
 }
 
@@ -54,16 +54,16 @@ void	print_status(t_status status, t_philo *philo, int debug, t_table *table)
 	else if (!to_finish(philo->table))
 	{
 		if (TAKE_FIRST_FORK == status || TAKE_SECOND_FORK == status)
-			printf(W"%-6ld"RST" %d has taken a fork\n", elapsed, philo->id);
+			printf(W "%-6ld" RST" %d has taken a fork\n", elapsed, philo->id);
 		else if (EATING == status)
-			printf(W"%-6ld"C" %d is eating\n"RST, elapsed, philo->id);
+			printf(W "%-6ld"C" %d is eating\n" RST, elapsed, philo->id);
 		else if (SLEEPING == status)
-			printf(W"%-6ld"RST" %d is sleeping\n"RST, elapsed, philo->id);
+			printf(W "%-6ld" RST" %d is sleeping\n" RST, elapsed, philo->id);
 		else if (THINKING == status)
-			printf(W"%-6ld"RST" %d is thinking\n"RST, elapsed, philo->id);
+			printf(W "%-6ld" RST" %d is thinking\n" RST, elapsed, philo->id);
 	}
 	else if (DIED == status)
-		printf(R"%-6ld"C" %d died\n"RST, elapsed, philo->id);
+		printf(R "%-6ld"C" %d died\n" RST, elapsed, philo->id);
 	mutex_handler(&philo->table->print_mtx, UNLOCK, table);
 }
 

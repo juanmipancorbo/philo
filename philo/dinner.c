@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:58:18 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 15:25:37 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/02 23:17:35 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	*to_alone(void *data)
 		to_time(MILLISECOND, philo->table), philo->table);
 	to_increase(&philo->table->table_mtx, &philo->table->nbr_threads_running,
 		philo->table);
-	mutex_handler(&philo->first_fork->mtx, LOCK, philo->table);
 	print_status(TAKE_FIRST_FORK, philo, DEBUG_MODE, philo->table);
 	while (!to_finish(philo->table))
 		usleep(200);
@@ -97,18 +96,18 @@ void	to_dinner(t_table *table)
 	to_error(err, table);
 	if (table->philo_nbr > 1)
 		while (++i < table->philo_nbr && !err)
+		{
 			err = thread_handler(&table->philos[i].thread_id, to_start,
-					&table->philos[i], CREATE);
-	to_error(err, table);
+				&table->philos[i], CREATE);
+			to_error(err, table);
+		}
 	err = thread_handler(&table->monitor, to_monitor, table, CREATE);
 	to_error(err, table);
 	table->start_time = to_time(MILLISECOND, table);
 	to_set(&table->table_mtx, &table->threads_ready, 1, table);
 	i = -1;
 	while (++i < table->philo_nbr && !err)
-		err = thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
-	to_error(err, table);
+		thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
 	to_set(&table->table_mtx, &table->end_time, 1, table);
-	err = thread_handler(&table->monitor, NULL, NULL, JOIN);
-	to_error(err, table);
+	thread_handler(&table->monitor, NULL, NULL, JOIN);
 }

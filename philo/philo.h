@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 15:24:33 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/03 00:39:11 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef enum e_opcode
 	DESTROY,
 	CREATE,
 	JOIN,
+	DETACH,
 }				t_opcode;
 
 typedef enum e_time_code
@@ -113,7 +114,7 @@ typedef struct s_table
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
-void	to_parse(t_table *table, char **argv);
+int		to_parse(t_table *table, char **argv);
 int		to_exit(const char *error, t_table *table);
 void	*to_malloc(size_t bytes, t_table *table);
 void	mutex_handler(t_mtx *mutex, t_opcode opcode, t_table *table);

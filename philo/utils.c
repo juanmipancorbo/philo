@@ -6,7 +6,7 @@
 /*   By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/07/28 14:14:32 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/03 00:38:24 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,8 @@ void	to_clean(t_table *table)
 	}
 	mutex_handler(&table->table_mtx, DESTROY, table);
 	mutex_handler(&table->print_mtx, DESTROY, table);
-	if (table->forks)
-		free (table->forks);
-	if (table->philos)
-		free (table->philos);
+	free (table->forks);
+	free (table->philos);
 }
 
 void	to_set(t_mtx *mutex, long *dst, long value, t_table *table)

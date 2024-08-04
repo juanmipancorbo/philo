@@ -6,21 +6,21 @@
 #    By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/22 19:30:49 by jpancorb          #+#    #+#              #
-#    Updated: 2024/07/28 14:31:07 by jpancorb         ###   ########.fr        #
+#    Updated: 2024/08/02 23:56:30 by jpancorb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= philo
 SRCS	= dinner.c handlers.c parser.c main.c monitor.c syncro.c utils.c
 HEADER	= philo.h
-CFLAGS	= -Wall -Werror -Wextra 
+CFLAGS	= -fsanitize=address -Wall -Werror -Wextra 
 
 OBJS	= $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		cc $(CFLAGS) -o $@ $^
+		cc $(CFLAGS) -o $@ $^ -fsanitize=address -lpthread
 
 %.o: %.c $(HEADER)
 		cc $(CFLAGS) -c $< -o $@
