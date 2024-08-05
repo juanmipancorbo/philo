@@ -3,24 +3,24 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpancorb <jpancorb@student.42barcel>       +#+  +:+       +#+         #
+#    By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/22 19:30:49 by jpancorb          #+#    #+#              #
-#    Updated: 2024/08/02 23:56:30 by jpancorb         ###   ########.fr        #
+#    Updated: 2024/08/05 21:46:00 by jpancorb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= philo
-SRCS	= dinner.c handlers.c parser.c main.c monitor.c syncro.c utils.c
+SRCS	= dinner.c parser.c main.c monitor.c syncro.c utils.c
 HEADER	= philo.h
-CFLAGS	= -fsanitize=address -Wall -Werror -Wextra 
+CFLAGS	= -fsanitize=thread -lpthread -Wall -Werror -Wextra 
 
 OBJS	= $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		cc $(CFLAGS) -o $@ $^ -fsanitize=address -lpthread
+		cc $(CFLAGS) -o $@ $^
 
 %.o: %.c $(HEADER)
 		cc $(CFLAGS) -c $< -o $@

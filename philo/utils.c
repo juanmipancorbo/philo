@@ -6,11 +6,17 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 20:41:58 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:37:36 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	to_error(char *err, t_table *table)
+{
+	if (err)
+		to_exit(err, table);
+}
 
 long	to_time(t_time_code time_code, t_table *table)
 {
@@ -26,7 +32,7 @@ long	to_time(t_time_code time_code, t_table *table)
 		return ((time.tv_sec * 1e6) + time.tv_usec);
 	else
 		to_exit("Wrong input to \'to_time\'.", table);
-	return (0);
+	return (1);
 }
 
 void	to_clean(t_table *table)
@@ -38,34 +44,30 @@ void	to_clean(t_table *table)
 	while (++i < table->philo_nbr)
 	{
 		philo = table->philos + i;
-		mutex_handler(&philo->mtx, DESTROY, table);
-		mutex_handler(&table->forks[i].mtx, DESTROY, table);
+		pthread_mutex_destroy(&philo->mtx);
+		pthread_mutex_destroy(&table->forks[i].mtx);
 	}
-	mutex_handler(&table->table_mtx, DESTROY, table);
-	mutex_handler(&table->print_mtx, DESTROY, table);
-	free (table->forks);
-	free (table->philos);
+	pthread_mutex_destroy(&table->table_mtx);
+	pthread_mutex_destroy(&table->print_mtx);
+	if (table->forks)
+		free (table->forks);
+	if (table->philos)
+		free (table->philos);
 }
 
-int	to_set(t_mtx *mutex, long *dst, long value, t_table *table)
+void	to_set(t_mtx *mutex, long *dst, long value)
 {
-	if (pthread_mutex_lock(mutex))
-		return (to_exit("Mutex LOCK error."));
+	pthread_mutex_lock(mutex);
 	*dst = value;
-	if (pthread_mutex_unlock(mutex))
-		return (to_exit("Mutex UNLOCK error."));
-	else
-		return (0);
+	pthread_mutex_unlock(mutex);
 }
 
-long	to_get(t_mtx *mutex, long *value, t_table *table)
+long	to_get(t_mtx *mutex, long *value)
 {
 	long	ret;
 
-	if (pthread_mutex_lock(mutex))
-		return (to_exit("Mutex LOCK error."));
+	pthread_mutex_lock(mutex);
 	ret = *value;
-	if (pthread_mutex_unlock(mutex))
-		return (to_exit("Mutex UNLOCK error."));
+	pthread_mutex_unlock(mutex);
 	return (ret);
 }

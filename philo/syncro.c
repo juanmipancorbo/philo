@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 19:57:54 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:33:31 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,38 +33,29 @@ void	precise_usleep(long usec, t_table *table)
 	}
 }
 
-int	to_wait(t_table *table)
+void	to_wait(t_table *table)
 {
-	while (!to_get(&table->table_mtx, &table->threads_ready, table))
+	while (!to_get(&table->table_mtx, &table->threads_ready))
 		;
-	if (to_get(&table->table_mtx, &table->threads_ready, table == 1))
-		return (0);
-	else
-		return (-1);
 }
 
-int	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr,
-		t_table *table)
+int	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr)
 {
 	int	ret;
 
 	ret = 0;
-	mutex_handler(mutex, LOCK, table);
+	pthread_mutex_lock(mutex);
 	if (*threads == philo_nbr)
 		ret = 1;
-	mutex_handler(mutex, UNLOCK, table);
+	pthread_mutex_unlock(mutex);
 	return (ret);
 }
 
-int	to_increase(t_mtx *mutex, long *value, char *error, t_table *table)
+void	to_increase(t_mtx *mutex, long *value)
 {
-	if (pthread_mutex_lock(mutex))
-		return (to_exit("Mutex LOCK error."));
+	pthread_mutex_lock(mutex);
 	(*value)++;
-	if (pthread_mutex_unlock(mutex))
-		return (to_exit("Mutex UNLOCK error."));
-	else
-		return (0);
+	pthread_mutex_unlock(mutex);
 }
 
 void	to_detach(t_philo *philo)

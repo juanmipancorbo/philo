@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:45:27 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 15:23:49 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:08:50 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,17 @@ int	main(int argc, char **argv)
 
 	if (argc == 5 || argc == 6)
 	{
-		if (to_parse(&table, argv))
+		if (to_parse(&table, argv) || to_dinner(&table))
+		{
+			to_clean(&table);
 			return (1);
-		if (to_dinner(&table))
-			return (1);
-		to_clean(&table);
-		printf(M"Dinner finished\n"RST);
+		}
+		else
+		{
+			printf(M"Dinner finished\n"RST);
+			to_clean(&table);
+			return (0);
+		}
 	}
 	else
 	{
@@ -42,5 +47,4 @@ int	main(int argc, char **argv)
 			G"			  all in milliseconds"C"      Optional"RST, NULL);
 		return (1);
 	}
-	return (0);
 }

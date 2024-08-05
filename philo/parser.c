@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/04 20:14:10 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:25:03 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	to_forks(t_philo *philo, t_fork *forks, int philo_position)
 	}
 }
 
-static void	to_philos(t_table *table)
+static int	to_philos(t_table *table)
 {
 	int		i;
 	t_philo	*philo;
@@ -75,9 +75,10 @@ static void	to_philos(t_table *table)
 		philo->thread_id = 0;
 		philo->table = table;
 		if (pthread_mutex_init(&philo->mtx, NULL))
-			return (to_exit("Mutex INIT error (philo[%d].mtx).", i + 1));
+			return (to_exit("Mutex INIT error (philos mtx).", NULL));
 		to_forks(philo, table->forks, i);
 	}
+	return (0);
 }
 
 static int	to_init(t_table *table)
@@ -88,24 +89,25 @@ static int	to_init(t_table *table)
 	// table->end = 0;
 	// table->threads_ready = 0;
 	// table->nbr_threads_running = 0;
-	// table->monitor = 0;
 	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
 	if (!table->philos)
-		return (to_exit("Malloc error."));
-	table->forks = to_malloc(sizeof(t_fork) * table->philo_nbr, table);
+		return (to_exit("Malloc error.", NULL));
+	table->forks = malloc(sizeof(t_fork) * table->philo_nbr);
 	if (!table->forks)
-		return (to_exit("Malloc error."));
+		return (to_exit("Malloc error.", NULL));
 	if (pthread_mutex_init(&table->table_mtx, NULL))
-		return (to_exit("Mutex INIT error (table_mtx)."));
+		return (to_exit("Mutex INIT error (table_mtx).", NULL));
 	if (pthread_mutex_init(&table->print_mtx, NULL))
-		return (to_exit("Mutex INIT error (print_mtx)."));
+		return (to_exit("Mutex INIT error (print_mtx).", NULL));
 	while (++i < table->philo_nbr)
 	{
 		if (pthread_mutex_init(&table->forks[i].mtx, NULL))
-			return (to_exit("Mutex INIT error (forks[%d].mtx).", i));
+			return (to_exit("Mutex INIT error (fork mtx).", NULL));
 		table->forks[i].id = i;
 	}
-	to_philos(table);
+	if (to_philos(table))
+		return (1);
+	return (0);
 }
 
 int	to_parse(t_table *table, char **argv)
