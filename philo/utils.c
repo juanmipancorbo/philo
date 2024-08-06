@@ -6,24 +6,18 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:41:39 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/05 21:37:36 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:15:36 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	to_error(char *err, t_table *table)
-{
-	if (err)
-		to_exit(err, table);
-}
-
-long	to_time(t_time_code time_code, t_table *table)
+long	to_time(t_time_code time_code)
 {
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL))
-		to_exit("Gettimeofday failed.", table);
+		to_exit("Gettimeofday failed.");
 	else if (SECOND == time_code)
 		return (time.tv_sec + (time.tv_usec / 1e6));
 	else if (MILLISECOND == time_code)
@@ -31,7 +25,7 @@ long	to_time(t_time_code time_code, t_table *table)
 	else if (MICROSECOND == time_code)
 		return ((time.tv_sec * 1e6) + time.tv_usec);
 	else
-		to_exit("Wrong input to \'to_time\'.", table);
+		to_exit("Wrong input to \'to_time\'.");
 	return (1);
 }
 

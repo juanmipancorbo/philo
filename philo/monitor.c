@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 20:29:02 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/05 21:32:21 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:28:28 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,15 @@ int	to_finish(t_table *table)
 	return (to_get(&table->table_mtx, &table->end));
 }
 
-void	print_status(t_status status, t_philo *philo, t_table *table)
+void	print_status(t_status status, t_philo *philo)
 {
 	long	elapsed;
 
-	elapsed = to_time(MILLISECOND, table) - philo->table->start_time;
+	elapsed = to_time(MILLISECOND) - philo->table->start_time;
 	if (philo->full_of_food)
 		return ;
-	if (pthread_mutex_lock(&philo->table->print_mtx))
-		to_exit("Mutex LOCK error.", table);
-	else if (!to_finish(philo->table))
+	pthread_mutex_lock(&philo->table->print_mtx);
+	if (!to_finish(philo->table))
 	{
 		if (TAKE_FIRST_FORK == status || TAKE_SECOND_FORK == status)
 			printf(W "%-6ld" RST" %d has taken a fork\n", elapsed, philo->id);
@@ -39,8 +38,7 @@ void	print_status(t_status status, t_philo *philo, t_table *table)
 	}
 	else if (DIED == status)
 		printf(R "%-6ld"C" %d died\n" RST, elapsed, philo->id);
-	if (pthread_mutex_unlock(&philo->table->print_mtx))
-		to_exit("Mutex UNLOCK error.", table);
+	pthread_mutex_unlock(&philo->table->print_mtx);
 }
 
 static int	to_die(t_philo *philo)
@@ -49,7 +47,7 @@ static int	to_die(t_philo *philo)
 
 	if (to_get(&philo->mtx, &philo->full_of_food))
 		return (0);
-	elapsed = to_time(MILLISECOND, philo->table) - to_get(&philo->mtx,
+	elapsed = to_time(MILLISECOND) - to_get(&philo->mtx,
 			&philo->last_meal_time);
 	if (elapsed > (philo->table->time_to_die / 1e3))
 		return (1);
@@ -73,7 +71,7 @@ void	*to_monitor(void *data)
 			if (to_die(table->philos + i))
 			{
 				to_set(&table->table_mtx, &table->end, 1);
-				print_status(DIED, table->philos + i, table);
+				print_status(DIED, table->philos + i);
 			}
 		}
 	}

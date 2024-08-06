@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/05 21:31:51 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:18:43 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,21 +114,20 @@ typedef struct s_table
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 int		to_parse(t_table *table, char **argv);
-int		to_exit(const char *error, t_table *table);
+int		to_exit(const char *error);
 int		to_dinner(t_table *table);
 void	to_set(t_mtx *mutex, long *dst, long value);
 long	to_get(t_mtx *mutex, long *value);
 int		to_finish(t_table *table);
 void	to_wait(t_table *table);
-long	to_time(t_time_code time_code, t_table *table);
+long	to_time(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
-void	print_status(t_status status, t_philo *philo, t_table *table);
+void	print_status(t_status status, t_philo *philo);
 int		all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
 void	to_increase(t_mtx *mutex, long *value);
 void	*to_monitor(void *data);
 void	to_clean(t_table *table);
 void	to_think(t_philo *philo, int to_detach);
 void	to_detach(t_philo *philo);
-void	to_error(char *err, t_table *table);
 
 #endif

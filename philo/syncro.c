@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:33:04 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/05 21:33:31 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:15:05 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ void	precise_usleep(long usec, t_table *table)
 	long	elapsed;
 	long	time_left;
 
-	start = to_time(MICROSECOND, table);
-	while (to_time(MICROSECOND, table) - start < usec)
+	start = to_time(MICROSECOND);
+	while (to_time(MICROSECOND) - start < usec)
 	{
 		if (to_finish(table))
 			break ;
-		elapsed = to_time(MICROSECOND, table) - start;
+		elapsed = to_time(MICROSECOND) - start;
 		time_left = usec - elapsed;
 		if (time_left > 1e3)
 			usleep(time_left / 2);
 		else
-			while (to_time(MICROSECOND, table) - start < usec)
+			while (to_time(MICROSECOND) - start < usec)
 				;
 	}
 }

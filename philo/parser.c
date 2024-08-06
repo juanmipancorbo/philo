@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 19:14:12 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/05 21:25:03 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:35:47 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ static int	atol_check(char *str, int type_arg)
 		if (str[i] >= '0' && str[i] <= '9')
 			result = (result * 10) + (str[i++] - 48);
 		else
-			result = to_exit("Only positive numbers are allowed.", NULL);
+			return (to_exit("Only positive numbers are allowed."));
 	}
 	if (result == 0)
-		result = to_exit("Values cannot be 0.", NULL);
+		return (to_exit("Values cannot be 0."));
 	if (type_arg == 0 && result > 1000)
-		result = to_exit("The number of philos should not exceed 1000.", NULL);
+		return (to_exit("The number of philos should not exceed 1000."));
 	if (result > INT_MAX || i > 10)
-		result = to_exit("Values cannot exceed INT_MAX.", NULL);
+		return (to_exit("Values cannot exceed INT_MAX."));
 	if (type_arg == 1 && result < 60)
-		result = to_exit("Values cannot be less than 60 ms.", NULL);
+		return (to_exit("Values cannot be less than 60 ms."));
 	return (result);
 }
 
@@ -75,7 +75,7 @@ static int	to_philos(t_table *table)
 		philo->thread_id = 0;
 		philo->table = table;
 		if (pthread_mutex_init(&philo->mtx, NULL))
-			return (to_exit("Mutex INIT error (philos mtx).", NULL));
+			return (to_exit("Mutex INIT error (philos mtx)."));
 		to_forks(philo, table->forks, i);
 	}
 	return (0);
@@ -86,23 +86,23 @@ static int	to_init(t_table *table)
 	int	i;
 
 	i = -1;
-	// table->end = 0;
-	// table->threads_ready = 0;
-	// table->nbr_threads_running = 0;
+	table->end = 0;
+	table->threads_ready = 0;
+	table->nbr_threads_running = 0;
 	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
 	if (!table->philos)
-		return (to_exit("Malloc error.", NULL));
+		return (to_exit("Malloc error."));
 	table->forks = malloc(sizeof(t_fork) * table->philo_nbr);
 	if (!table->forks)
-		return (to_exit("Malloc error.", NULL));
+		return (to_exit("Malloc error."));
 	if (pthread_mutex_init(&table->table_mtx, NULL))
-		return (to_exit("Mutex INIT error (table_mtx).", NULL));
+		return (to_exit("Mutex INIT error (table_mtx)."));
 	if (pthread_mutex_init(&table->print_mtx, NULL))
-		return (to_exit("Mutex INIT error (print_mtx).", NULL));
+		return (to_exit("Mutex INIT error (print_mtx)."));
 	while (++i < table->philo_nbr)
 	{
 		if (pthread_mutex_init(&table->forks[i].mtx, NULL))
-			return (to_exit("Mutex INIT error (fork mtx).", NULL));
+			return (to_exit("Mutex INIT error (fork mtx)."));
 		table->forks[i].id = i;
 	}
 	if (to_philos(table))
@@ -130,6 +130,8 @@ int	to_parse(t_table *table, char **argv)
 		if (table->max_meals < 0)
 			return (1);
 	}
+	if (!argv[5])
+		table->max_meals = 0;
 	if (to_init(table))
 		return (1);
 	return (0);
