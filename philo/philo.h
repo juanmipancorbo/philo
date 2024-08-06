@@ -6,7 +6,7 @@
 /*   By: jpancorb < jpancorb@student.42barcelona    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:29:42 by jpancorb          #+#    #+#             */
-/*   Updated: 2024/08/06 20:18:43 by jpancorb         ###   ########.fr       */
+/*   Updated: 2024/08/06 21:10:03 by jpancorb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <sys/time.h> //gettimeofday
 # include <limits.h> //INT_MAX
 # include <string.h> // memset
-//# include <errno.h> //error macros
 
 /* ************************************************************************** */
 /*                           ANSI ESCAPE SECUENCES                            */
@@ -56,7 +55,6 @@ typedef enum e_opcode
 	DESTROY,
 	CREATE,
 	JOIN,
-	DETACH,
 }				t_opcode;
 
 typedef enum e_time_code
